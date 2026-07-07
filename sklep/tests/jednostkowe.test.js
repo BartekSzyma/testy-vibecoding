@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   KATALOG, round2, sumaNetto, dostawa, rabat, vat, podsumowanie,
 } from '../src/koszyk.js';
+import { walidujEmail, walidujZamowienie } from '../src/walidacja.js';
 
 describe('katalog', () => {
   it('U0: ma 4 produkty z cenami netto', () => {
@@ -72,5 +73,24 @@ describe('podsumowanie', () => {
     const p = podsumowanie([{ id: 'kubek', ilosc: 4 }], 'VIBE10');
     expect(p.netto).toBe(100);
     expect(p.kwotaRabatu).toBe(10);
+  });
+});
+
+describe('walidacja', () => {
+  it('e-mail bez @ jest niepoprawny', () => {
+    expect(walidujEmail('jan.kowalski')).toBe(false);
+  });
+  it('e-mail z @ jest poprawny', () => {
+    expect(walidujEmail('jan@example.com')).toBe(true);
+  });
+  it('kompletne dane -> ok', () => {
+    const w = walidujZamowienie({ imie: 'Jan', email: 'jan@x.pl', adres: 'ul. Zielona 1' });
+    expect(w.ok).toBe(true);
+  });
+  it('brak imienia i zły e-mail -> lista błędów', () => {
+    const w = walidujZamowienie({ imie: '', email: 'zle', adres: 'ul. X' });
+    expect(w.ok).toBe(false);
+    expect(w.bledy).toContain('imie');
+    expect(w.bledy).toContain('email');
   });
 });
