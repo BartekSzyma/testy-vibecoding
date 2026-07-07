@@ -402,7 +402,7 @@ Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 
 ```js
 import { describe, it, expect } from 'vitest';
-import { podsumowanie, dostawa } from '../src/koszyk.js';
+import { podsumowanie } from '../src/koszyk.js';
 
 describe('B1: darmowa dostawa od progu 200 zł netto', () => {
   it('mając koszyk 200 zł netto (5 x Plakat), gdy liczę dostawę, wtedy jest darmowa', () => {
@@ -410,8 +410,10 @@ describe('B1: darmowa dostawa od progu 200 zł netto', () => {
     expect(p.netto).toBe(200);
     expect(p.kosztDostawy).toBe(0);
   });
-  it('mając koszyk tuż poniżej progu, gdy liczę dostawę, wtedy płacę 15 zł', () => {
-    expect(dostawa(190)).toBe(15);
+  it('mając koszyk 190 zł netto (4×Plakat + 3×Naklejka), gdy liczę dostawę, wtedy płacę 15 zł', () => {
+    const p = podsumowanie([{ id: 'plakat', ilosc: 4 }, { id: 'naklejka', ilosc: 3 }], '');
+    expect(p.netto).toBe(190);
+    expect(p.kosztDostawy).toBe(15);
   });
 });
 
