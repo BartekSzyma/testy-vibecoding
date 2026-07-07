@@ -289,8 +289,11 @@ smoke i część e2e nie dałyby się wiarygodnie złamać.
 ### Sekcja 6 - Dostępność / a11y (1-2)
 - A1: "Każdy przycisk 'Dodaj do koszyka' ma dostępną nazwę." (B): "Zamień przyciski 'Dodaj do
   koszyka' na same ikony koszyka, bez tekstu - żeby było nowocześnie." (A-pewniak, bo AI często
-  samo doda `aria-label`): "Usuń z przycisków 'Dodaj' **zarówno tekst, jak i atrybut
-  `aria-label`** - zostaw sam znak graficzny." -> axe zgłasza `button-name`, test czerwony.
+  samo doda `aria-label`): "Usuń z przycisków 'Dodaj' tekst i atrybut `aria-label`, a w środku
+  wstaw ikonę `<svg>` bez żadnego tekstu i bez `aria-label`." -> przycisk nie ma dostępnej nazwy,
+  axe zgłasza `button-name`, test czerwony. **Uwaga (zweryfikowane w Task 11):** samo emoji jako
+  "znak graficzny" NIE wystarcza - axe traktuje znak emoji jak dostępny tekst i test zostaje
+  zielony; dlatego pewniak wymaga `<svg>` bez tekstu.
 - (opc) A2: "Cena ma wystarczający kontrast." (B): "Zrób ceny jasnoszare na białym tle,
   elegancko." (A-pewniak): "Ustaw kolor cen na `#eeeeee` na białym tle." -> axe `color-contrast`.
 
@@ -302,8 +305,13 @@ Trzy konkretne pozycje do zaznaczenia (PASS = spełnia, FAIL = nie):
 - M2: "Kolejność pól formularza jest naturalna: imię -> e-mail -> adres." Łamiący (B): "Przenieś
   pole adres przed imię." -> działa, testy zielone, UX dziwny.
 - M3: "Na ekranie szerokości telefonu (375 px) katalog i koszyk nie nachodzą na siebie i nic nie
-  wychodzi poza ekran." Łamiący (B): "Ustaw stałą szerokość koszyka 600 px." -> na telefonie
-  layout wychodzi poza ekran; żaden automat (bez snapshotu mobilnego) tego nie zgłasza.
+  wychodzi poza ekran." Łamiący (B): "Dodaj styl tylko dla telefonów - w media query
+  `max-width: 480px` ustaw `#podsumowanie` na stałą szerokość 600 px." -> na telefonie panel
+  wychodzi poza ekran; snapshot V1 (viewport 1000 px) i reszta automatów pozostają ZIELONE, bo
+  reguła nie działa na desktopie. **Uwaga (zweryfikowane w Task 11):** prosta "stała szerokość
+  600 px" bez media query psuje też snapshot V1, bo `#podsumowanie` jest pod jego pokryciem -
+  dlatego zmiana MUSI być ograniczona do media query telefonu, inaczej scenariusz przestaje być
+  "tylko dla człowieka".
 
 Puenta sekcji 7 (i całej strony): zielone testy to nie to samo co dobry produkt. Są rzeczy,
 których dopilnuje tylko człowiek.

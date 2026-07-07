@@ -1082,7 +1082,7 @@ const SEKCJE = [
       { nazwa: 'Przyciski "Dodaj" mają dostępną nazwę', coSprawdza: 'axe nie zgłasza button-name w #katalog.',
         promptLamiacy: 'Zamień przyciski "Dodaj do koszyka" na same ikony koszyka, bez tekstu - żeby było nowocześnie.',
         oczekiwanie: 'axe zgłasza button-name, test A1 czerwony.',
-        pewniak: 'Usuń z przycisków "Dodaj" zarówno tekst, jak i atrybut aria-label - zostaw sam znak graficzny.' },
+        pewniak: 'Usuń z przycisków "Dodaj" tekst i aria-label, a w środku wstaw ikonę <svg> bez tekstu i bez aria-label. (Samo emoji NIE wystarcza - axe liczy je jak tekst.)' },
     ],
   },
   {
@@ -1099,9 +1099,9 @@ const SEKCJE = [
         oczekiwanie: 'Działa, testy zielone, ale UX dziwny.',
         pewniak: 'Brak - ocena ludzka.' },
       { nazwa: 'Na telefonie (375px) nic nie wychodzi poza ekran', coSprawdza: 'CZŁOWIEK: layout mobilny nie przepełnia się.',
-        promptLamiacy: 'Ustaw stałą szerokość koszyka 600 px.',
-        oczekiwanie: 'Na telefonie layout wychodzi poza ekran; automat bez snapshotu mobilnego nie zgłasza.',
-        pewniak: 'Brak - ocena ludzka.' },
+        promptLamiacy: 'Dodaj styl tylko dla telefonów: w media query max-width 480px ustaw #podsumowanie na stałą szerokość 600px.',
+        oczekiwanie: 'Automaty ZIELONE (snapshot na desktopie 1000px nietknięty), ale na telefonie panel 600px wychodzi poza ekran 375px - łapie tylko człowiek.',
+        pewniak: 'Brak - ocena ludzka. (Zweryfikowane: bez media query prosta stała szerokość psuje też snapshot V1, więc zmiana MUSI być mobile-only.)' },
     ],
   },
 ];
