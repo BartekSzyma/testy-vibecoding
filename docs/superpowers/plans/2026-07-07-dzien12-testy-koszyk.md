@@ -887,9 +887,14 @@ reset do "zielonego startu" go skasuje. Jeśli chcesz go zachować, ZANIM zreset
 
 > zapisz mój test
 
-Claude Code wykona `git add -A && git commit -m "moj-test-sekcja-X"`. Wtedy test wchodzi do
-historii i kolejny zwykły reset (do ostatniego zielonego commita) go nie usunie. Pełny
-`reset --hard zielony-start` cofa aż do startu - używaj go tylko, gdy chcesz w pełni czysty stan.
+Claude Code wykona `git add -A && git commit -m "moj-test-sekcja-X"` i od razu przesunie punkt
+startowy na ten commit: `git tag -f zielony-start`. Dzięki temu Twój test staje się częścią
+nowego "zielonego startu" - kolejne "przywróć apkę do zielonego startu" cofają tylko psucie apki,
+a Twój test zostaje. Wystarczy jedno zdanie "zapisz mój test" - dostajesz i commit, i przesunięty
+start.
+
+Uwaga: jeśli NIE zapiszesz testu, "przywróć apkę do zielonego startu" cofa wszystko do ostatniego
+startu i Twój niezapisany test zniknie (to normalne - domyślnie testy są jednorazowe).
 
 ## Troubleshooting
 

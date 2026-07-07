@@ -140,9 +140,10 @@ uwaga że prowadzący pomaga przy problemach środowiskowych).
 6. PRZYWRÓĆ apkę do zielonego (reset - patrz niżej).
 7. Twój ruch - ułóż własny test słowami wg szablonu, poproś Claude Code, by go dopisał,
    uruchom -> zielony. Ten test jest **świadomie jednorazowy** (ćwiczenie formułowania). Jeśli
-   uczestnik chce go zachować, przed przejściem dalej mówi: *"zapisz mój test"* -> Claude Code
-   robi `git add -A && git commit -m "moj-test-sekcja-X"`. Wtedy staje się częścią historii i
-   kolejny reset go nie skasuje.
+   uczestnik chce go zachować, mówi: *"zapisz mój test"* -> Claude Code robi
+   `git add -A && git commit -m "moj-test-sekcja-X"` **i przesuwa tag**: `git tag -f zielony-start`.
+   Dzięki temu test staje się częścią nowego "zielonego startu" i kolejny reset go NIE skasuje
+   (cofnie tylko psucie apki). Bez zapisu - reset kasuje niezapisany test (domyślnie jednorazowy).
 
 ### Reset / przywracanie
 
@@ -152,12 +153,12 @@ Baseline to otagowany commit `zielony-start` z Kroku 0. Po każdym złamaniu ucz
 Pod spodem: `git reset --hard zielony-start && git clean -fd`. Sam `git restore .` **nie
 wystarcza** - nie usuwa nowych plików, które prompt łamiący mógł utworzyć (np. `koszyk-new.js`
 ze smoke), a te psułyby kolejne iteracje. `git clean -fd` usuwa te pliki, a dzięki `.gitignore`
-(sek. 3) **nie** rusza `node_modules` ani raportów. Uwaga na interakcję z krokiem 7: jeśli
-uczestnik zacommitował własny test, `reset --hard zielony-start` cofnąłby też ten commit -
-dlatego "zapisany" test przenosimy jako osobny commit **na** baseline, a reset kieruje się do
-tagu tylko wtedy, gdy chcemy w pełni czysty start; do zwykłego "cofnij psucie" wystarczy powrót
-do ostatniego zielonego commita. Reużywamy git z Dnia 3 - kotwica jest niezawodna. Wariant
-"cofnij ostatnią zmianę" bywa zawodny.
+(sek. 3) **nie** rusza `node_modules` ani raportów. Reset zawsze celuje w tag `zielony-start`.
+Spójna interakcja z krokiem 7: gdy uczestnik zapisuje własny test, `"zapisz mój test"`
+**przesuwa tag** (`git tag -f zielony-start`) na commit z testem - dlatego kolejny reset
+zachowuje test (cofa tylko psucie apki), a nie ma potrzeby uczenia drugiej, osobnej frazy
+resetu. Reużywamy git z Dnia 3 - kotwica jest niezawodna. Wariant "cofnij ostatnią zmianę" bywa
+zawodny.
 
 ## 6. Zasada projektowania promptów łamiących (sedno)
 
