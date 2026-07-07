@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dzień 12: testy w vibecodingu - workbook z 7 typami testów, bankiem promptów łamiących i kreatorem własnych testów.">
+  <title>Dzień 12: Testy - Twoja siatka bezpieczeństwa</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%230d0b1a'/><path d='M4 8 L7 11 L12 4' fill='none' stroke='%2339ff8b' stroke-width='2'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --tlo:#0d0b1a; --tlo-2:#15122b; --tekst:#f2f0ff; --tekst-cien:#c4bff0;
+      --neon-zielony:#39ff8b; --neon-magenta:#ff4fd8; --neon-cyan:#46e6ff; --neon-zolty:#ffd23f;
+      --ramka:#3d3a6e;
+      --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      --pixel:"Pixelify Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    }
+    *{box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{margin:0; background:var(--tlo); color:var(--tekst); font-family:var(--sans); font-size:18px; line-height:1.6;}
+    .pixel{font-family:var(--pixel); letter-spacing:1px;}
+    section{min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:6vh 6vw; max-width:1000px; margin:0 auto; position:relative;}
+    h1{font-family:var(--pixel); color:var(--neon-cyan); font-size:clamp(28px,6vw,54px); text-shadow:0 0 12px rgba(70,230,255,.5); line-height:1.2;}
+    h2{font-family:var(--pixel); color:var(--neon-cyan); font-size:clamp(22px,3.4vw,34px); margin-bottom:.5em; text-transform:uppercase; letter-spacing:2px;}
+    h3{font-family:var(--pixel); color:var(--neon-zielony); font-size:19px; margin:0 0 8px; letter-spacing:.5px;}
+    h4{font-family:var(--pixel); color:var(--neon-cyan); margin:0 0 8px; letter-spacing:1px; font-size:16px;}
+    p{max-width:64ch; color:var(--tekst);}
+    .akcent-zielony{color:var(--neon-zielony);} .akcent-magenta{color:var(--neon-magenta);} .akcent-zolty{color:var(--neon-zolty);}
+    /* nakładka scanline - czysto dekoracyjna, nie przesłania tekstu */
+    body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:9999; background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px); opacity:.35; mix-blend-mode:overlay;}
+    .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease;}
+    .reveal.is-visible{opacity:1; transform:none;}
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto;}
+      .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
+    }
+
+    button.retro{font-family:var(--pixel); font-size:14px; color:var(--tlo); background:var(--neon-zielony); border:none; padding:11px 16px; border-radius:6px; cursor:pointer; box-shadow:0 4px 0 #1f9e57; transition:transform .08s, box-shadow .08s; letter-spacing:.5px;}
+    button.retro:active{transform:translateY(3px); box-shadow:0 1px 0 #1f9e57;}
+    button.retro.magenta{background:var(--neon-magenta); box-shadow:0 4px 0 #b32f97;}
+    button.retro.cyan{background:var(--neon-cyan); box-shadow:0 4px 0 #2b97ad;}
+    button.retro:disabled{opacity:.7; cursor:default;}
+    button.retro:focus-visible{outline:3px solid var(--neon-zolty); outline-offset:2px;}
+
+    /* Piramida i mapa testów */
+    .piramida-wizual{display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; max-width:640px; margin:22px auto;}
+    .warstwa{display:flex; flex-direction:column; align-items:center; justify-content:center; text-decoration:none; padding:14px 10px; border-radius:8px; border:2px solid var(--ramka); background:var(--tlo-2); transition:transform .15s, border-color .15s;}
+    .warstwa:hover, .warstwa:focus-visible{transform:translateY(-3px); border-color:var(--neon-zielony); outline:none;}
+    .warstwa .etq{font-family:var(--pixel); color:var(--neon-zielony); font-size:16px; letter-spacing:1px;}
+    .warstwa .opis{font-size:12px; color:var(--tekst-cien); margin-top:4px; text-align:center;}
+    .warstwa-e2e{width:44%;}
+    .warstwa-behawioralne{width:68%;}
+    .warstwa-jednostkowe{width:94%;}
+    .poza-osia{margin-top:14px; width:100%; max-width:640px;}
+    .etykieta-poza-osia{font-size:14px; color:var(--tekst-cien); margin:0 0 10px;}
+    .chipy-poza-osia{display:flex; flex-wrap:wrap; gap:12px; list-style:none; padding:0; margin:0;}
+    .chip{font-family:var(--pixel); font-size:13px; color:var(--neon-magenta); text-decoration:none; border:1px dashed var(--neon-magenta); border-radius:8px; padding:10px 14px; text-align:center; display:inline-block; transition:transform .15s;}
+    .chip:hover, .chip:focus-visible{transform:translateY(-3px); outline:none;}
+    .chip small{font-family:var(--sans); color:var(--tekst-cien); display:block; margin-top:2px;}
+
+    /* Karty testów */
+    .sekcja{align-items:stretch;}
+    .licznik-postep{font-family:var(--pixel); font-size:13px; color:var(--neon-zolty); letter-spacing:1px; margin:4px 0 18px;}
+    .karta-testu{border:2px solid var(--ramka); background:var(--tlo-2); border-radius:10px; padding:18px 20px; margin:14px 0; max-width:70ch;}
+    .karta-testu p{margin:6px 0; font-size:15px; max-width:none;}
+    .karta-testu details{margin:10px 0; border:1px dashed var(--ramka); border-radius:6px; padding:8px 12px; background:rgba(0,0,0,.15);}
+    .karta-testu summary{cursor:pointer; font-family:var(--pixel); color:var(--neon-cyan); font-size:13px; letter-spacing:1px;}
+    .karta-testu summary:focus-visible{outline:2px solid var(--neon-zolty);}
+    .karta-testu details p{margin:8px 0 2px;}
+    .karta-testu .kopiuj{margin:8px 8px 8px 0;}
+    .postep{display:flex; align-items:center; gap:8px; margin-top:12px; font-size:14px; color:var(--tekst-cien); cursor:pointer; width:fit-content;}
+    .postep input[type=checkbox]{width:18px; height:18px; accent-color:var(--neon-zielony); cursor:pointer;}
+
+    /* Kreator własnego testu */
+    .kreator{margin-top:26px; padding:18px 20px; border:2px dashed var(--neon-cyan); border-radius:10px; background:rgba(70,230,255,.05); max-width:70ch;}
+    .kreator .wzor{font-family:var(--pixel); font-size:13px; color:var(--tekst-cien); border:1px dashed var(--ramka); border-radius:6px; padding:8px 10px; display:inline-block; margin-bottom:12px; max-width:none;}
+    .kreator input.pole-kreatora{width:100%; max-width:520px; padding:10px 12px; font-size:15px; border-radius:6px; border:2px solid var(--ramka); background:var(--tlo); color:var(--tekst); font-family:var(--sans); margin-bottom:10px; display:block;}
+    .kreator input.pole-kreatora:focus-visible{outline:none; border-color:var(--neon-cyan);}
+    .flash-kreator{display:block; margin-top:8px; font-size:13px; color:var(--neon-zolty); min-height:18px;}
+
+    .nazwa-pliku{display:inline-block; max-width:100%; overflow-x:auto; white-space:nowrap; font-family:var(--pixel); color:var(--neon-magenta); padding:6px 10px; border:1px dashed var(--ramka); border-radius:6px;}
+    .krok0-tresc{border:2px solid var(--ramka); background:var(--tlo-2); border-radius:10px; padding:18px 20px; max-width:70ch; margin:14px 0;}
+    .zlota-zasada-box{border:2px solid var(--neon-zolty); background:rgba(255,210,63,.06); border-radius:10px; padding:20px 24px; max-width:70ch; margin:14px 0;}
+    ul.checklist-koncowa{max-width:64ch; line-height:1.9;}
+  </style>
+</head>
+<body>
+  <main>
+
+    <section id="hero">
+      <h1 class="reveal">DZIEŃ 12: TESTY<br>- TWOJA SIATKA<br>BEZPIECZEŃSTWA<br>W VIBECODINGU.</h1>
+      <p class="reveal">Nie czytasz kodu, który pisze za Ciebie AI? W porządku - od tego są testy. To one patrzą za Ciebie na każdą zmianę.</p>
+      <p class="reveal pixel akcent-zolty">&#9660; przewijaj w dół</p>
+    </section>
+
+    <section id="po-co">
+      <h2 class="reveal">Po co testy, skoro nie patrzysz na kod</h2>
+      <p class="reveal">W vibecodingu kod za Ciebie pisze i <span class="akcent-zielony">zmienia</span> AI. Prosisz o "drobną poprawkę", a AI - bez złej woli - potrafi po drodze zepsuć coś, o co wcale nie prosiłeś. Ty tego nie zobaczysz w kodzie, bo go nie czytasz.</p>
+      <p class="reveal">Dlatego testy są Twoimi <span class="akcent-zielony">oczami</span>. Nie musisz rozumieć ani jednej linijki - wystarczy, że wiesz: zielono znaczy działa, czerwono znaczy coś się zepsuło. Każda testowana reguła to obietnica, której AI musi dotrzymać.</p>
+      <p class="reveal">Umiejętność, którą tu ćwiczysz, to <span class="akcent-magenta">opisywanie testu słowami</span>: mówisz po polsku, co ma być prawdą, a AI zamienia to na kod testu. Nie uczysz się pisać testów ręcznie - uczysz się je precyzyjnie zamawiać.</p>
+    </section>
+
+    <section id="piramida">
+      <h2 class="reveal">Piramida i mapa testów</h2>
+      <p class="reveal">To <span class="akcent-zolty">rozszerzona</span> piramida - nie myl jej z klasycznymi 3 poziomami znanymi z innych kursów. Trzy typy idą od tanich i szybkich na dole po drogie i wolne na górze; trzy kolejne stoją z boku, bo nie mieszczą się na osi "tanie kontra drogie".</p>
+      <div class="piramida-wizual reveal">
+        <a href="#sekcja-e2e" class="warstwa warstwa-e2e"><span class="etq">E2E</span><span class="opis">drogie i wolne - cały przepływ jak użytkownik</span></a>
+        <a href="#sekcja-behawioralne" class="warstwa warstwa-behawioralne"><span class="etq">Behawioralne</span><span class="opis">reguły biznesowe - mając / gdy / wtedy</span></a>
+        <a href="#sekcja-jednostkowe" class="warstwa warstwa-jednostkowe"><span class="etq">Jednostkowe</span><span class="opis">tanie i szybkie - najwięcej ich</span></a>
+      </div>
+      <div class="poza-osia reveal">
+        <p class="etykieta-poza-osia">Z boku - poza osią "tanie -&gt; drogie" (każdy mierzy coś innego):</p>
+        <div class="chipy-poza-osia">
+          <a href="#sekcja-snapshot" class="chip">Snapshot<br><small>wygląd ekranu</small></a>
+          <a href="#sekcja-a11y" class="chip">Dostępność<br><small>a11y</small></a>
+          <a href="#sekcja-reczne" class="chip">Ręczne<br><small>ocena człowieka</small></a>
+        </div>
+      </div>
+      <p class="reveal">Dlaczego aż 7, a nie klasyczne 3 (jednostkowe / integracyjne / e2e)? Bo w realnym projekcie liczy się też wygląd, dostępność i osąd człowieka - a tych klasyczna piramida w ogóle nie obejmuje. Każda z 7 sekcji niżej ma własną kartę promptów.</p>
+    </section>
+
+    <section id="krok0">
+      <h2 class="reveal">Krok 0 - przygotuj poligon</h2>
+      <p class="reveal">Zanim zaczniesz cokolwiek łamać, otwórz folder <span class="nazwa-pliku">sklep/</span> w Claude Code i wklej poniższe polecenie. AI samo zainstaluje zależności, uruchomi testy i pokaże Ci zielony start.</p>
+      <div class="krok0-tresc reveal">
+        <p id="krok0-tekst"></p>
+        <button class="retro kopiuj" id="btn-krok0">Kopiuj polecenie Kroku 0</button>
+      </div>
+      <p class="reveal">Zapamiętaj też drugie zdanie - reset. Ilekroć coś zepsujesz i chcesz wrócić do stanu wyjściowego, mówisz do Claude Code: <em id="reset-tekst-inline"></em>. Każda karta poniżej ma własny przycisk, który to kopiuje za Ciebie.</p>
+    </section>
+
+    <div id="sekcje"><!-- 7 sekcji renderowanych z tablicy SEKCJE --></div>
+
+    <section id="zlota-zasada">
+      <h2 class="reveal">Złota zasada</h2>
+      <div class="zlota-zasada-box reveal">
+        <p class="pixel akcent-zolty" style="font-size:18px;">Zielone testy to nie to samo co dobry produkt.</p>
+        <p>Automat sprawdza tylko to, o co go poprosiłeś. Sekcja "testy ręczne" pokazała Ci trzy przypadki, w których wszystkie automaty świecą się na zielono, a mimo to produkt jest zły: niejasny komunikat, dziwna kolejność pól, panel wychodzący poza ekran telefonu. Te rzeczy złapie tylko człowiek - Ty.</p>
+      </div>
+      <p class="reveal">Co dalej: przejdź cały bank promptów po kolei, zaznaczaj postęp checkboxem przy każdej karcie i układaj własne testy w kreatorach na końcu każdej sekcji. Gdy skończysz, Twoja apka ma pełny komplet 7 typów testów - i Ty wiesz, co każdy z nich pilnuje.</p>
+      <ul class="checklist-koncowa reveal">
+        <li>Przeszedłeś Krok 0 i widziałeś zielony start.</li>
+        <li>Złamałeś przynajmniej jeden test w każdej z 7 sekcji i przeczytałeś komunikat czerwonego wyniku.</li>
+        <li>Każdorazowo wracałeś do zielonego startu przed kolejnym ćwiczeniem.</li>
+        <li>Ułożyłeś własny test słowami w co najmniej jednym kreatorze.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    "use strict";
+
+    const KROK0 = 'Przeczytaj README, przygotuj projekt: zainstaluj zależności, uruchom testy i pokaż, że wszystkie są zielone. Potem zainicjuj git i zapisz jako "zielony start".';
+    const RESET = 'przywróć apkę do zielonego startu';
+
+    const SEKCJE = [
+      {
+        id: 'smoke', tytul: 'Smoke test',
+        coToPoco: 'Najprostszy test: czy apka w ogóle się ładuje i nie wywala błędu. Pierwszy krok, buduje pewność.',
+        kreator: 'Dopisz test smoke: po otwarciu strony element ___ jest widoczny.',
+        karty: [
+          { nazwa: 'Strona ładuje się i widać 4 produkty',
+            coSprawdza: 'Widać 4 karty produktu i konsola nie zgłasza błędu.',
+            promptLamiacy: 'Zmień w index.html ścieżkę skryptu z src/ui.js na src/ui-new.js.',
+            oczekiwanie: 'Katalog pusty, test smoke (4 karty) czerwony.',
+            pewniak: 'Usuń z index.html kontener katalogu <div id="katalog">.' },
+        ],
+      },
+      {
+        id: 'jednostkowe', tytul: 'Testy jednostkowe',
+        coToPoco: 'Sprawdzają pojedyncze funkcje liczące (suma, VAT, rabat) w oderwaniu od UI. Tanie i szybkie.',
+        kreator: 'Dopisz test jednostkowy: dla wejścia ___ wynik funkcji ___ powinien być ___.',
+        karty: [
+          { nazwa: '3 × Kubek = 75 zł netto', coSprawdza: 'Suma pozycji = cena × ilość.',
+            promptLamiacy: 'Dodaj rabat ilościowy: przy 3+ szt. tego samego produktu licz pozycję 10% taniej.',
+            oczekiwanie: 'suma = 67,50 zamiast 75, test U1 czerwony.',
+            pewniak: 'W funkcji sumy pozycji dodawaj cenę i ilość zamiast mnożyć.' },
+          { nazwa: 'VAT 23% z 75 = 17,25 (brutto 92,25)', coSprawdza: 'vat() = 23% od netto po rabacie.',
+            promptLamiacy: 'Zaokrąglaj kwotę VAT w dół do pełnych złotych, żeby ceny ładniej wyglądały.',
+            oczekiwanie: 'oczekiwano 17,25, było 17,00.', pewniak: 'Ustaw stawkę VAT na 0.' },
+          { nazwa: 'VIBE10 daje -10% od netto: ze 100 -> 10', coSprawdza: 'rabat() = 10% od sumy netto.',
+            promptLamiacy: 'Zmień rabat VIBE10 z 10% na 15%.',
+            oczekiwanie: 'oczekiwano rabat 10, było 15.', pewniak: 'Ustaw rabat VIBE10 na 50%.' },
+          { nazwa: 'Pusty koszyk: suma() = liczba 0', coSprawdza: 'sumaNetto([]) === 0 i jest liczbą.',
+            promptLamiacy: 'Gdy koszyk jest pusty, niech funkcja sumy zwraca null zamiast 0.',
+            oczekiwanie: 'test typeof / === 0 czerwony.', pewniak: 'Niech suma() dla pustego koszyka rzuca wyjątek.' },
+          { nazwa: '3 × Naklejka = 30 netto, VAT 6,90', coSprawdza: 'vat(30) === 6,90.',
+            promptLamiacy: 'Licz VAT jako 20% zamiast 23%, bo to prostsze.',
+            oczekiwanie: 'oczekiwano 6,90, było 6,00.', pewniak: 'Ustaw stawkę VAT na 10%.' },
+        ],
+      },
+      {
+        id: 'behawioralne', tytul: 'Testy behawioralne (BDD)',
+        coToPoco: 'Opisują regułę biznesową w języku "mając... gdy... wtedy...". Najbliżej opisu słowami.',
+        kreator: 'Dopisz test behawioralny: mając ___, gdy ___, wtedy ___.',
+        karty: [
+          { nazwa: 'Koszyk 200 zł netto (5×Plakat) -> darmowa dostawa', coSprawdza: 'dostawa = 0 gdy netto ≥ 200.',
+            promptLamiacy: 'Zmień zasadę: darmowa dostawa dopiero powyżej 200 zł, nie od 200.',
+            oczekiwanie: 'na progu 200 dostawa 15 zamiast 0, test B1 czerwony.',
+            pewniak: 'Podnieś próg darmowej dostawy do 500 zł.' },
+          { nazwa: 'Pusty koszyk + VIBE10 -> rabat NIE aktywny', coSprawdza: 'podsumowanie([], VIBE10).rabatAktywny === false.',
+            promptLamiacy: 'Aktywuj kod VIBE10 także dla pustego koszyka i pokazuj komunikat "Rabat naliczony".',
+            oczekiwanie: 'rabatAktywny = true dla pustego koszyka, test B2 czerwony.',
+            pewniak: 'Usuń warunek niepustego koszyka - VIBE10 zawsze ustawia flagę rabatu na true.' },
+          { nazwa: 'Pusty koszyk -> przycisk zamówienia nieaktywny', coSprawdza: '#zloz-zamowienie ma disabled przy pustym koszyku.',
+            promptLamiacy: 'Niech przycisk "Złóż zamówienie" będzie zawsze aktywny.',
+            oczekiwanie: 'przycisk aktywny mimo pustego koszyka, test B3 czerwony.',
+            pewniak: 'Usuń całą logikę wyłączania przycisku zamówienia.' },
+          { nazwa: 'Rabat od towaru (100), nie od towaru+dostawa', coSprawdza: 'kwotaRabatu = 10 dla koszyka 100 netto z VIBE10.',
+            promptLamiacy: 'Licz rabat od całej kwoty razem z dostawą.',
+            oczekiwanie: 'rabat 11,50 zamiast 10, test B4 czerwony.',
+            pewniak: 'Do podstawy rabatu VIBE10 dolicz koszt dostawy.' },
+        ],
+      },
+      {
+        id: 'e2e', tytul: 'Testy E2E (Playwright)',
+        coToPoco: 'Przechodzą całą apkę jak użytkownik: klikają, wpisują, sprawdzają wynik na ekranie.',
+        kreator: 'Dopisz test e2e: gdy kliknę ___ i wpiszę ___, wtedy na ekranie pojawi się ___.',
+        karty: [
+          { nazwa: 'Dodaj 2 produkty -> dane -> zamówienie -> potwierdzenie', coSprawdza: 'Po złożeniu widać #potwierdzenie z numerem ZAM-.',
+            promptLamiacy: 'Po kliknięciu "Złóż zamówienie" nie pokazuj ekranu potwierdzenia, tylko wyczyść koszyk.',
+            oczekiwanie: 'brak potwierdzenia, test E1 czerwony.',
+            pewniak: 'Ustaw ekran #potwierdzenie na stałe ukryty (display:none).' },
+          { nazwa: 'E-mail bez @ blokuje zamówienie', coSprawdza: 'Zły e-mail nie pokazuje potwierdzenia, pokazuje błąd.',
+            promptLamiacy: 'Usuń walidację e-maila, przyjmuj dowolny tekst.',
+            oczekiwanie: 'potwierdzenie mimo złego e-maila, test E2 czerwony.',
+            pewniak: 'Zawsze pomijaj walidację formularza.' },
+          { nazwa: 'Dodanie produktu zwiększa licznik', coSprawdza: '#licznik-koszyka rośnie z 0 na 1.',
+            promptLamiacy: 'Po dodaniu produktu odświeżaj całą stronę.',
+            oczekiwanie: 'licznik wraca do 0, test E3 czerwony.',
+            pewniak: 'Po dodaniu produktu ustaw licznik koszyka na 0.' },
+          { nazwa: 'Potwierdzenie pokazuje kwotę z rabatem', coSprawdza: '#kwota-potwierdzenie = doZaplaty z rabatem (221,40).',
+            promptLamiacy: 'Na potwierdzeniu pokazuj zawsze sumę netto, bez rabatu i VAT.',
+            oczekiwanie: 'kwota inna niż 221,40 zł, test E4 czerwony.',
+            pewniak: 'Na potwierdzeniu pokaż zawsze 0 zł.' },
+        ],
+      },
+      {
+        id: 'snapshot', tytul: 'Regresja wizualna (snapshot)',
+        coToPoco: 'Robi zrzut ekranu i porównuje z wzorcem - automat wykrywa, że coś się rozjechało wizualnie.',
+        kreator: 'Dopisz test snapshot: wygląd elementu ___ ma zgadzać się z zatwierdzonym zrzutem.',
+        karty: [
+          { nazwa: 'Panel podsumowania zgodny ze zrzutem', coSprawdza: 'Wygląd #podsumowanie zgadza się z baseline.',
+            promptLamiacy: 'Powiększ mocno sumę i zrób ją czerwoną, żeby rzucała się w oczy.',
+            oczekiwanie: 'pixel diff, test V1 czerwony.',
+            pewniak: 'Ukryj cały panel podsumowania (display:none).' },
+        ],
+      },
+      {
+        id: 'a11y', tytul: 'Dostępność (a11y)',
+        coToPoco: 'Sprawdza, czy apka jest obsługiwalna dla wszystkich: etykiety przycisków, kontrast, klawiatura.',
+        kreator: 'Dopisz test dostępności: element ___ ma mieć dostępną nazwę / wystarczający kontrast.',
+        karty: [
+          { nazwa: 'Przyciski "Dodaj" mają dostępną nazwę', coSprawdza: 'axe nie zgłasza button-name w #katalog.',
+            promptLamiacy: 'Zamień przyciski "Dodaj do koszyka" na same ikony koszyka, bez tekstu - żeby było nowocześnie.',
+            oczekiwanie: 'axe zgłasza button-name, test A1 czerwony.',
+            pewniak: 'Usuń z przycisków "Dodaj" tekst i aria-label, a w środku wstaw ikonę <svg> bez tekstu i bez aria-label. (Samo emoji NIE wystarcza - axe liczy je jak tekst.)' },
+        ],
+      },
+      {
+        id: 'reczne', tytul: 'Testy ręczne (twist)',
+        coToPoco: 'To, czego żaden automat nie złapie. Zielone testy to nie to samo co dobry produkt - tu ocenia człowiek.',
+        kreator: 'Dopisz pozycję checklisty ręcznej: sprawdź, czy ___ (PASS = spełnia, FAIL = nie).',
+        karty: [
+          { nazwa: 'Komunikat o dostawie zrozumiały (kwota + waluta)', coSprawdza: 'CZŁOWIEK: "Do darmowej dostawy brakuje 12,00 zł".',
+            promptLamiacy: 'Skróć komunikat o darmowej dostawie do "Brakuje: 12".',
+            oczekiwanie: 'Automaty ZIELONE, człowiek: FAIL (brak waluty, niejasne).',
+            pewniak: 'Brak - to test ręczny, żaden automat go nie łapie. O to właśnie chodzi.' },
+          { nazwa: 'Kolejność pól formularza naturalna', coSprawdza: 'CZŁOWIEK: imię -> e-mail -> adres.',
+            promptLamiacy: 'Przenieś pole adres przed imię.',
+            oczekiwanie: 'Działa, testy zielone, ale UX dziwny.',
+            pewniak: 'Brak - ocena ludzka.' },
+          { nazwa: 'Na telefonie (375px) nic nie wychodzi poza ekran', coSprawdza: 'CZŁOWIEK: layout mobilny nie przepełnia się.',
+            promptLamiacy: 'Dodaj styl tylko dla telefonów: w media query max-width 480px ustaw #podsumowanie na stałą szerokość 600px.',
+            oczekiwanie: 'Automaty ZIELONE (snapshot na desktopie 1000px nietknięty), ale na telefonie panel 600px wychodzi poza ekran 375px - łapie tylko człowiek.',
+            pewniak: 'Brak - ocena ludzka. (Zweryfikowane: bez media query prosta stała szerokość psuje też snapshot V1, więc zmiana MUSI być mobile-only.)' },
+        ],
+      },
+    ];
+
+    /* ---------- Kopiowanie do schowka ---------- */
+    async function kopiujDoSchowka(tekst, btn) {
+      const stary = btn.textContent;
+      btn.disabled = true;
+      try {
+        await navigator.clipboard.writeText(tekst);
+        btn.textContent = 'Skopiowano!';
+      } catch (e) {
+        btn.textContent = 'Nie udało się - skopiuj ręcznie';
+      }
+      setTimeout(() => { btn.textContent = stary; btn.disabled = false; }, 1500);
+    }
+
+    function podepnijKopiowanie() {
+      document.querySelectorAll('.kopiuj').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          kopiujDoSchowka(decodeURIComponent(btn.dataset.tekst), btn);
+        });
+      });
+    }
+
+    /* ---------- Postęp (localStorage) ---------- */
+    function aktualizujLicznik(sekcjaId) {
+      const boxy = document.querySelectorAll('.postep input[data-sekcja="' + sekcjaId + '"]');
+      const zaznaczone = Array.from(boxy).filter((b) => b.checked).length;
+      const el = document.querySelector('.licznik-postep[data-sekcja="' + sekcjaId + '"]');
+      if (el) el.textContent = 'Postęp: ' + zaznaczone + '/' + boxy.length + ' zaliczone';
+    }
+
+    function wczytajPostep() {
+      const sekcjeId = new Set();
+      document.querySelectorAll('.postep input').forEach((cb) => {
+        cb.checked = localStorage.getItem(cb.dataset.klucz) === '1';
+        sekcjeId.add(cb.dataset.sekcja);
+        cb.addEventListener('change', () => {
+          localStorage.setItem(cb.dataset.klucz, cb.checked ? '1' : '0');
+          aktualizujLicznik(cb.dataset.sekcja);
+        });
+      });
+      sekcjeId.forEach((id) => aktualizujLicznik(id));
+    }
+
+    /* ---------- Render sekcji i kart ---------- */
+    function render() {
+      const root = document.querySelector('#sekcje');
+      for (const s of SEKCJE) {
+        const sek = document.createElement('section');
+        sek.className = 'sekcja reveal';
+        sek.id = 'sekcja-' + s.id;
+        sek.innerHTML = '<h2>' + s.tytul + '</h2><p>' + s.coToPoco + '</p>'
+          + '<p class="licznik-postep" data-sekcja="' + s.id + '"></p>';
+
+        for (const k of s.karty) {
+          const karta = document.createElement('div');
+          karta.className = 'karta-testu';
+          const klucz = s.id + '-' + k.nazwa;
+          karta.innerHTML = `
+            <h3>${k.nazwa}</h3>
+            <p><em>Co sprawdza:</em> ${k.coSprawdza}</p>
+            <button class="retro magenta kopiuj" data-tekst="${encodeURIComponent(k.promptLamiacy)}">Kopiuj prompt łamiący</button>
+            <button class="retro cyan kopiuj" data-tekst="${encodeURIComponent(RESET)}">Kopiuj: przywróć do zielonego startu</button>
+            <details><summary>Spodziewaj się</summary><p>${k.oczekiwanie}</p></details>
+            <details><summary>Wariant-pewniak (jeśli AI był ostrożny)</summary><p>${k.pewniak || 'brak'}</p></details>
+            <label class="postep"><input type="checkbox" data-klucz="${klucz}" data-sekcja="${s.id}"> zrobione</label>`;
+          sek.appendChild(karta);
+        }
+
+        const kreatorDiv = document.createElement('div');
+        kreatorDiv.className = 'kreator';
+        kreatorDiv.innerHTML = `
+          <h4>Kreator własnego testu</h4>
+          <p class="wzor">${s.kreator}</p>
+          <input type="text" class="pole-kreatora" placeholder="Wpisz swoją wersję wg wzoru powyżej" aria-label="Twój własny test dla sekcji ${s.tytul}">
+          <button class="retro cyan zbuduj-prompt">Zbuduj prompt</button>
+          <span class="flash-kreator" aria-live="polite"></span>`;
+        const inputEl = kreatorDiv.querySelector('.pole-kreatora');
+        const buttonEl = kreatorDiv.querySelector('.zbuduj-prompt');
+        const flashEl = kreatorDiv.querySelector('.flash-kreator');
+        buttonEl.addEventListener('click', () => {
+          const wartosc = inputEl.value.trim();
+          if (!wartosc) {
+            flashEl.textContent = 'Najpierw wpisz swój test w polu powyżej.';
+            setTimeout(() => { flashEl.textContent = ''; }, 1500);
+            return;
+          }
+          kopiujDoSchowka('Dopisz test: ' + wartosc, buttonEl);
+        });
+        sek.appendChild(kreatorDiv);
+
+        root.appendChild(sek);
+      }
+      podepnijKopiowanie();
+      wczytajPostep();
+    }
+
+    /* ---------- Reveal-on-scroll ---------- */
+    function prefersReducedMotion() {
+      return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    function inicjujReveal() {
+      const elementy = document.querySelectorAll('.reveal');
+      if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+        elementy.forEach((el) => el.classList.add('is-visible'));
+        return;
+      }
+      const obs = new IntersectionObserver((wpisy) => {
+        wpisy.forEach((w) => { if (w.isIntersecting) { w.target.classList.add('is-visible'); obs.unobserve(w.target); } });
+      }, { threshold: 0.12 });
+      elementy.forEach((el) => obs.observe(el));
+    }
+
+    /* ---------- Treści stałe (Krok 0) ---------- */
+    function wypelnijKrok0() {
+      const tekstEl = document.getElementById('krok0-tekst');
+      if (tekstEl) tekstEl.textContent = KROK0;
+      const resetInline = document.getElementById('reset-tekst-inline');
+      if (resetInline) resetInline.textContent = '"' + RESET + '"';
+      const btn = document.getElementById('btn-krok0');
+      if (btn) btn.dataset.tekst = encodeURIComponent(KROK0);
+    }
+
+    function init() {
+      wypelnijKrok0();
+      render();
+      inicjujReveal();
+    }
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
