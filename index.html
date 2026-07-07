@@ -153,6 +153,8 @@
   <script>
     "use strict";
 
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
     const KROK0 = 'Przeczytaj README, przygotuj projekt: zainstaluj zależności, uruchom testy i pokaż, że wszystkie są zielone. Potem zainicjuj git i zapisz jako "zielony start".';
     const RESET = 'przywróć apkę do zielonego startu';
 
@@ -330,7 +332,7 @@
         const sek = document.createElement('section');
         sek.className = 'sekcja reveal';
         sek.id = 'sekcja-' + s.id;
-        sek.innerHTML = '<h2>' + s.tytul + '</h2><p>' + s.coToPoco + '</p>'
+        sek.innerHTML = '<h2>' + escapeHtml(s.tytul) + '</h2><p>' + escapeHtml(s.coToPoco) + '</p>'
           + '<p class="licznik-postep" data-sekcja="' + s.id + '"></p>';
 
         for (const k of s.karty) {
@@ -338,13 +340,13 @@
           karta.className = 'karta-testu';
           const klucz = s.id + '-' + k.nazwa;
           karta.innerHTML = `
-            <h3>${k.nazwa}</h3>
-            <p><em>Co sprawdza:</em> ${k.coSprawdza}</p>
+            <h3>${escapeHtml(k.nazwa)}</h3>
+            <p><em>Co sprawdza:</em> ${escapeHtml(k.coSprawdza)}</p>
             <button class="retro magenta kopiuj" data-tekst="${encodeURIComponent(k.promptLamiacy)}">Kopiuj prompt łamiący</button>
             <button class="retro cyan kopiuj" data-tekst="${encodeURIComponent(RESET)}">Kopiuj: przywróć do zielonego startu</button>
-            <details><summary>Spodziewaj się</summary><p>${k.oczekiwanie}</p></details>
-            <details><summary>Wariant-pewniak (jeśli AI był ostrożny)</summary><p>${k.pewniak || 'brak'}</p></details>
-            <label class="postep"><input type="checkbox" data-klucz="${klucz}" data-sekcja="${s.id}"> zrobione</label>`;
+            <details><summary>Spodziewaj się</summary><p>${escapeHtml(k.oczekiwanie)}</p></details>
+            <details><summary>Wariant-pewniak (jeśli AI był ostrożny)</summary><p>${escapeHtml(k.pewniak || 'brak')}</p></details>
+            <label class="postep"><input type="checkbox" data-klucz="${escapeHtml(klucz)}" data-sekcja="${s.id}"> zrobione</label>`;
           sek.appendChild(karta);
         }
 
@@ -352,8 +354,8 @@
         kreatorDiv.className = 'kreator';
         kreatorDiv.innerHTML = `
           <h4>Kreator własnego testu</h4>
-          <p class="wzor">${s.kreator}</p>
-          <input type="text" class="pole-kreatora" placeholder="Wpisz swoją wersję wg wzoru powyżej" aria-label="Twój własny test dla sekcji ${s.tytul}">
+          <p class="wzor">${escapeHtml(s.kreator)}</p>
+          <input type="text" class="pole-kreatora" placeholder="Wpisz swoją wersję wg wzoru powyżej" aria-label="Twój własny test dla sekcji ${escapeHtml(s.tytul)}">
           <button class="retro cyan zbuduj-prompt">Zbuduj prompt</button>
           <span class="flash-kreator" aria-live="polite"></span>`;
         const inputEl = kreatorDiv.querySelector('.pole-kreatora');
