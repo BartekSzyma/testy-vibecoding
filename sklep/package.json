@@ -1,0 +1,20 @@
+{
+  "name": "sklep-testy-dzien12",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test:unit": "vitest run tests/jednostkowe.test.js",
+    "test:bdd": "vitest run tests/behawioralne.test.js",
+    "test:e2e": "playwright test tests/e2e.spec.js",
+    "test:visual": "playwright test tests/snapshot.spec.js",
+    "test:a11y": "playwright test tests/dostepnosc.spec.js",
+    "test": "vitest run && playwright test"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0",
+    "jsdom": "^25.0.0",
+    "@playwright/test": "^1.48.0",
+    "@axe-core/playwright": "^4.10.0"
+  }
+}
