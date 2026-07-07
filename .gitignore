@@ -1,0 +1,11 @@
+# Zależności i artefakty Node / Playwright (pojawią się w sklep/)
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+.cache/
+
+# Pliki systemowe
+Thumbs.db
+Desktop.ini
+.DS_Store
