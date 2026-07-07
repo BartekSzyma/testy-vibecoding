@@ -900,6 +900,12 @@ historii i kolejny zwykły reset (do ostatniego zielonego commita) go nie usunie
   chromium`). W razie ograniczeń sieci zgłoś prowadzącemu.
 - **Testy snapshot czerwone na starcie:** baseline jest w repo; jeśli mimo to jest czerwony,
   poproś: "pokaż różnicę w raporcie Playwright" - drobne różnice fontów rozwiązuje prowadzący.
+- **Jesteś na macOS/Linux (nie Windows)?** Baseline zrzutu jest generowany dla Windows
+  (`podsumowanie-win32.png`), bo kurs prowadzony jest na Windows. Na innym systemie Playwright
+  szuka pliku dla Twojej platformy i test snapshot będzie czerwony na starcie. Jednorazowo
+  wygeneruj własny baseline: powiedz Claude Code *"zaktualizuj baseline zrzutów"*
+  (`npx playwright test tests/snapshot.spec.js --update-snapshots`), potem `git add` powstałego
+  PNG. Od tej pory snapshot działa u Ciebie normalnie.
 ````
 
 - [ ] **Step 2: Pełny zielony przebieg**

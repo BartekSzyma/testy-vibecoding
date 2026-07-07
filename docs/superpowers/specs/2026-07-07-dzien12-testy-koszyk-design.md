@@ -360,6 +360,13 @@ których dopilnuje tylko człowiek.
   stabilnych scenariuszy, renderujemy w kontrolowanym viewport Playwright, baseline jest
   **zacommitowany** i generowany na etapie budowy materiałów (nie u uczestnika), a
   `updateSnapshots: 'missing'` chroni pierwszy zielony przebieg.
+- **Baseline snapshotu jest per-platforma (Windows-only)**: Playwright zapisuje nazwę zrzutu z
+  segmentem systemu (`podsumowanie-win32.png`). Kurs jest windowsowy, więc dla większości
+  uczestników baseline pasuje i pierwszy `npm test` jest zielony. Uczestnik na macOS/Linux
+  dostanie czerwony snapshot na starcie (brak pliku dla jego platformy) - to inny tryb awarii
+  niż różnice fontów. Mitygacja: README ma sekcję troubleshooting z jednorazowym
+  `--update-snapshots` dla nie-Windows. Świadomie NIE nadpisujemy `snapshotPathTemplate` (jeden
+  wspólny plik i tak rozjechałby się pikselowo między systemami - to nie byłaby poprawa).
 - **Git jako zależność resetu**: zakładamy znajomość z Dnia 3; wszystkie komendy git idą przez
   Claude Code, uczestnik nie wpisuje ich ręcznie. Reset = `git reset --hard zielony-start &&
   git clean -fd`; bezpieczeństwo `git clean` opiera się na `.gitignore` (sek. 3) - to trzeba
