@@ -897,7 +897,9 @@ historii i kolejny zwykły reset (do ostatniego zielonego commita) go nie usunie
   Potrzebny Node 18+. Jeśli brak - poproś prowadzącego o pomoc z instalacją.
 - **`npx playwright install` długo trwa / błąd sieci:** pobranie przeglądarek to jednorazowy
   krok. Przy problemach: "zainstaluj tylko przeglądarkę chromium" (`npx playwright install
-  chromium`). W razie ograniczeń sieci zgłoś prowadzącemu.
+  chromium`). Jeśli przeglądarki mają trafić w inne miejsce (np. wspólny cache), ustaw zmienną
+  środowiskową `PLAYWRIGHT_BROWSERS_PATH` przed instalacją. W razie ograniczeń sieci zgłoś
+  prowadzącemu.
 - **Testy snapshot czerwone na starcie:** baseline jest w repo; jeśli mimo to jest czerwony,
   poproś: "pokaż różnicę w raporcie Playwright" - drobne różnice fontów rozwiązuje prowadzący.
 - **Jesteś na macOS/Linux (nie Windows)?** Baseline zrzutu jest generowany dla Windows
