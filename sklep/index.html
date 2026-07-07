@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sklep - poligon testowy</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f4f4f8; color: #1a1a2e; }
+    h1 { font-size: 24px; }
+    #katalog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 520px; }
+    .karta { background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 12px; }
+    .karta button { margin-top: 8px; padding: 8px 12px; cursor: pointer; }
+    #podsumowanie { background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 16px; max-width: 340px; margin-top: 20px; }
+    #kwota-do-zaplaty { font-size: 22px; font-weight: bold; }
+    #komunikat-dostawa { color: #a15a00; font-size: 14px; }
+    #potwierdzenie[hidden] { display: none; }
+    .blad { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>Sklep - poligon testowy</h1>
+  <div id="katalog"></div>
+
+  <section id="podsumowanie">
+    <p>Koszyk: <span id="licznik-koszyka">0</span> szt.</p>
+    <p id="komunikat-dostawa"></p>
+    <label>Kod rabatowy: <input id="kod-rabatowy" type="text"></label>
+    <button id="zastosuj-kod">Zastosuj</button>
+    <p id="komunikat-rabat"></p>
+    <p>Do zapłaty: <span id="kwota-do-zaplaty">0,00 zł</span></p>
+    <h2>Zamówienie</h2>
+    <label>Imię: <input id="imie" type="text"></label>
+    <label>E-mail: <input id="email" type="text"></label>
+    <label>Adres: <input id="adres" type="text"></label>
+    <p id="blad-formularza" class="blad"></p>
+    <button id="zloz-zamowienie" disabled>Złóż zamówienie</button>
+  </section>
+
+  <section id="potwierdzenie" hidden>
+    <h2>Dziękujemy za zamówienie!</h2>
+    <p>Numer zamówienia: <span id="numer-zamowienia"></span></p>
+    <p>Kwota: <span id="kwota-potwierdzenie"></span></p>
+  </section>
+
+  <script type="module" src="src/ui.js"></script>
+</body>
+</html>
