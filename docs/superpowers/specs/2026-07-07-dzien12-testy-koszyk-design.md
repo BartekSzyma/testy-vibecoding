@@ -230,8 +230,8 @@ smoke i część e2e nie dałyby się wiarygodnie złamać.
 ### Sekcja 1 - Smoke (rozgrzewka)
 - Test: "Strona ładuje się, renderuje 4 produkty i konsola nie zgłasza błędu." (asercja: widoczne
   4 karty produktu + brak `pageerror`).
-- (B): "Zmień w index.html ścieżkę skryptu z `src/koszyk.js` na `src/koszyk-new.js`." -> moduł
-  się nie ładuje, katalog pusty.
+- (B): "Zmień w index.html ścieżkę skryptu z `src/ui.js` na `src/ui-new.js`." -> moduł
+  się nie ładuje, katalog pusty. (Uwaga: index.html ładuje `src/ui.js`, nie `koszyk.js`.)
 - (A-pewniak): "Usuń z index.html kontener katalogu `<div id='katalog'>`." -> renderer nie ma
   gdzie wstawić produktów, test na 4 karty zawsze czerwony.
 
@@ -267,8 +267,10 @@ smoke i część e2e nie dałyby się wiarygodnie złamać.
 ### Sekcja 4 - E2E w Playwright (3-5)
 - E1: "Dodaj 2 produkty -> dane -> Złóż zamówienie -> **ekran potwierdzenia z numerem**." (B,
   psuje faktyczny przepływ): "Po kliknięciu 'Złóż zamówienie' nie pokazuj ekranu potwierdzenia,
-  tylko wyczyść koszyk." -> e2e nie znajduje numeru zamówienia, przepływ się rwie. (A-pewniak,
-  poboczny - kruchość selektora): "Zmień etykietę przycisku ze 'Złóż zamówienie' na 'Zamawiam'."
+  tylko wyczyść koszyk." -> e2e nie znajduje numeru zamówienia, przepływ się rwie. (A-pewniak):
+  "Ustaw ekran potwierdzenia `#potwierdzenie` na stałe ukryty (`display:none`)." -> test na
+  widoczne potwierdzenie zawsze czerwony. (Uwaga: zmiana samej etykiety przycisku NIE złamie
+  testu, bo test klika po `#zloz-zamowienie` (id), a nie po tekście.)
 - E2: "E-mail bez znaku @ blokuje złożenie zamówienia." (A): "Usuń walidację e-maila, przyjmuj
   dowolny tekst."
 - E3: "Po dodaniu produktu licznik koszyka rośnie o 1." (B): "Po dodaniu produktu odświeżaj całą
