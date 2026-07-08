@@ -15,6 +15,9 @@
 - Pliki w UTF-8. Nazwy plików generowanych artefaktów w ASCII.
 - Apka: czysty HTML+JS, ES modules, bez frameworka i bez kroku build.
 - Katalog produktów renderowany PRZEZ JS do `<div id="katalog">` (warunek łamania smoke).
+- Apka używa modułów ES -> uczestnik ogląda ją SERWOWANĄ (`npm start`, http-server :8080), nie
+  dwuklikiem (`file://` blokuje moduły -> pusty katalog). README + workbook uczą "uruchom
+  podgląd sklepu". `package.json` ma skrypt `start`.
 - Katalog: Kubek 25, Koszulka 60, Plakat 40, Naklejka 10 (ceny netto, PLN).
 - Stałe: `PROG_DARMOWEJ_DOSTAWY = 200` (od wartości netto towarów), `KOSZT_DOSTAWY = 15`, `STAWKA_VAT = 0.23`, `RABAT = 0.10`, `KOD_RABATOWY = 'VIBE10'`.
 - Algorytm podsumowania (wiążąca kolejność): sumaNetto -> dostawa(próg na sumaNetto przed rabatem) -> rabat -> nettoPoRabacie -> vat -> bruttoTowarow -> doZaplaty. `round2` = zaokrąglenie do 2 miejsc, pół w górę.

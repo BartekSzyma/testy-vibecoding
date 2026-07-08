@@ -22,6 +22,21 @@ Zawsze mów: **"uruchom testy"** (to uruchamia wszystkie: jednostkowe, behawiora
 snapshot, a11y). Nie uruchamiaj tylko wybranego podzbioru - inaczej nie zobaczysz czerwieni
 w sekcjach snapshot/a11y.
 
+## Jak zobaczyć apkę na żywo
+
+Testy uruchamiasz przez "uruchom testy". Ale żeby **zobaczyć** apkę w przeglądarce (potrzebne
+np. w sekcji testów ręcznych - oceniasz wygląd i komunikaty okiem), musisz ją zaserwować.
+**Nie otwieraj pliku dwuklikiem** - dwuklik na `sklep/index.html` (adres `file://...`) pokaże
+pusty katalog, bo przeglądarki blokują moduły JavaScript wczytywane prosto z dysku.
+
+Powiedz Claude Code:
+
+> uruchom podgląd sklepu
+
+Claude Code wykona `npm start` (serwer na `http://localhost:8080`). Otwórz ten adres w
+przeglądarce - zobaczysz 4 produkty i działający koszyk. Gdy skończysz oglądać, powiedz
+"zatrzymaj podgląd".
+
 ## Reset - przywróć do zielonego startu
 
 Po każdym ćwiczeniu "łamiącym" powiedz:

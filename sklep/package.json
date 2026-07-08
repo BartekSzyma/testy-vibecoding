@@ -9,7 +9,8 @@
     "test:e2e": "playwright test tests/e2e.spec.js",
     "test:visual": "playwright test tests/snapshot.spec.js",
     "test:a11y": "playwright test tests/dostepnosc.spec.js",
-    "test": "vitest run && playwright test"
+    "test": "vitest run && playwright test",
+    "start": "http-server -p 8080 -c-1 ."
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",

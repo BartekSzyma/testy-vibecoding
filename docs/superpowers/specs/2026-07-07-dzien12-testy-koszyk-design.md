@@ -320,7 +320,12 @@ których dopilnuje tylko człowiek.
 ## 9. Stack techniczny
 
 - Apka: czysty HTML + JS (ES modules), bez frameworka i bez kroku build. Katalog renderowany
-  przez JS (warunek z sek. 8).
+  przez JS (warunek z sek. 8). **Konsekwencja modułów ES: apkę trzeba SERWOWAĆ po http, nie
+  otwierać dwuklikiem** - przeglądarki blokują `import` z `file://` (CORS), więc dwuklik na
+  `index.html` daje pusty katalog. Skrypt `npm start` (http-server na :8080) serwuje apkę;
+  workbook i README uczą frazy "uruchom podgląd sklepu". Testy Playwright i tak stawiają własny
+  serwer (`webServer`), więc ich to nie dotyczy - problem ujawnia się tylko przy ręcznym
+  otwieraniu pliku przez uczestnika (wykryte po realnym teście dwuklikiem, nie przez http).
 - Testy jednostkowe i behawioralne: **Vitest** z `vitest.config.js` (`environment: 'jsdom'`,
   `globals: true`) - potrzebne, bo logika importuje moduły ES i dotyka DOM. Behawioralne to styl
   given/when/then w nazwach `describe`/`it` - bez osobnego frameworka BDD (YAGNI).
