@@ -8,24 +8,24 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%230d0b1a'/><path d='M4 8 L7 11 L12 4' fill='none' stroke='%2339ff8b' stroke-width='2'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
       --tlo:#0d0b1a; --tlo-2:#15122b; --tekst:#f2f0ff; --tekst-cien:#c4bff0;
       --neon-zielony:#39ff8b; --neon-magenta:#ff4fd8; --neon-cyan:#46e6ff; --neon-zolty:#ffd23f;
       --ramka:#3d3a6e;
       --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-      --pixel:"Pixelify Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      --display:"Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
     }
     *{box-sizing:border-box;}
     html{scroll-behavior:smooth;}
     body{margin:0; background:var(--tlo); color:var(--tekst); font-family:var(--sans); font-size:18px; line-height:1.6;}
-    .pixel{font-family:var(--pixel); letter-spacing:1px;}
+    .display{font-family:var(--display); letter-spacing:.3px;}
     section{min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:6vh 6vw; max-width:1000px; margin:0 auto; position:relative;}
-    h1{font-family:var(--pixel); color:var(--neon-cyan); font-size:clamp(28px,6vw,54px); text-shadow:0 0 12px rgba(70,230,255,.5); line-height:1.2;}
-    h2{font-family:var(--pixel); color:var(--neon-cyan); font-size:clamp(22px,3.4vw,34px); margin-bottom:.5em; text-transform:uppercase; letter-spacing:2px;}
-    h3{font-family:var(--pixel); color:var(--neon-zielony); font-size:19px; margin:0 0 8px; letter-spacing:.5px;}
-    h4{font-family:var(--pixel); color:var(--neon-cyan); margin:0 0 8px; letter-spacing:1px; font-size:16px;}
+    h1{font-family:var(--display); color:var(--neon-cyan); font-size:clamp(28px,6vw,54px); text-shadow:0 0 12px rgba(70,230,255,.5); line-height:1.2;}
+    h2{font-family:var(--display); color:var(--neon-cyan); font-size:clamp(22px,3.4vw,34px); margin-bottom:.5em; text-transform:uppercase; letter-spacing:2px;}
+    h3{font-family:var(--display); color:var(--neon-zielony); font-size:19px; margin:0 0 8px; letter-spacing:.5px;}
+    h4{font-family:var(--display); color:var(--neon-cyan); margin:0 0 8px; letter-spacing:1px; font-size:16px;}
     p{max-width:64ch; color:var(--tekst);}
     .akcent-zielony{color:var(--neon-zielony);} .akcent-magenta{color:var(--neon-magenta);} .akcent-zolty{color:var(--neon-zolty);}
     /* nakładka scanline - czysto dekoracyjna, nie przesłania tekstu */
@@ -37,7 +37,7 @@
       .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
     }
 
-    button.retro{font-family:var(--pixel); font-size:14px; color:var(--tlo); background:var(--neon-zielony); border:none; padding:11px 16px; border-radius:6px; cursor:pointer; box-shadow:0 4px 0 #1f9e57; transition:transform .08s, box-shadow .08s; letter-spacing:.5px;}
+    button.retro{font-family:var(--display); font-size:14px; color:var(--tlo); background:var(--neon-zielony); border:none; padding:11px 16px; border-radius:6px; cursor:pointer; box-shadow:0 4px 0 #1f9e57; transition:transform .08s, box-shadow .08s; letter-spacing:.5px;}
     button.retro:active{transform:translateY(3px); box-shadow:0 1px 0 #1f9e57;}
     button.retro.magenta{background:var(--neon-magenta); box-shadow:0 4px 0 #b32f97;}
     button.retro.cyan{background:var(--neon-cyan); box-shadow:0 4px 0 #2b97ad;}
@@ -48,25 +48,30 @@
     .piramida-wizual{display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; max-width:640px; margin:22px auto;}
     .warstwa{display:flex; flex-direction:column; align-items:center; justify-content:center; text-decoration:none; padding:14px 10px; border-radius:8px; border:2px solid var(--ramka); background:var(--tlo-2); transition:transform .15s, border-color .15s;}
     .warstwa:hover, .warstwa:focus-visible{transform:translateY(-3px); border-color:var(--neon-zielony); outline:none;}
-    .warstwa .etq{font-family:var(--pixel); color:var(--neon-zielony); font-size:16px; letter-spacing:1px;}
+    .warstwa .etq{font-family:var(--display); color:var(--neon-zielony); font-size:16px; letter-spacing:1px;}
     .warstwa .opis{font-size:12px; color:var(--tekst-cien); margin-top:4px; text-align:center;}
     .warstwa-e2e{width:44%;}
     .warstwa-behawioralne{width:68%;}
     .warstwa-jednostkowe{width:94%;}
+    .brama-etykieta{font-size:14px; color:var(--tekst-cien); margin:0 0 8px;}
+    .brama-startowa{display:block; max-width:640px; margin:0 auto 12px; text-decoration:none; padding:12px 16px; border-radius:8px; border:2px dashed var(--neon-zolty); background:rgba(255,210,63,.06); transition:transform .15s, border-color .15s;}
+    .brama-startowa:hover, .brama-startowa:focus-visible{transform:translateY(-3px); border-color:var(--neon-zielony); outline:none;}
+    .brama-startowa .etq{font-family:var(--display); color:var(--neon-zolty); font-size:16px; letter-spacing:1px; display:block;}
+    .brama-startowa .opis{font-size:12px; color:var(--tekst-cien); display:block; margin-top:4px; line-height:1.5;}
     .poza-osia{margin-top:14px; width:100%; max-width:640px;}
     .etykieta-poza-osia{font-size:14px; color:var(--tekst-cien); margin:0 0 10px;}
     .chipy-poza-osia{display:flex; flex-wrap:wrap; gap:12px; list-style:none; padding:0; margin:0;}
-    .chip{font-family:var(--pixel); font-size:13px; color:var(--neon-magenta); text-decoration:none; border:1px dashed var(--neon-magenta); border-radius:8px; padding:10px 14px; text-align:center; display:inline-block; transition:transform .15s;}
+    .chip{font-family:var(--display); font-size:13px; color:var(--neon-magenta); text-decoration:none; border:1px dashed var(--neon-magenta); border-radius:8px; padding:10px 14px; text-align:center; display:inline-block; transition:transform .15s;}
     .chip:hover, .chip:focus-visible{transform:translateY(-3px); outline:none;}
     .chip small{font-family:var(--sans); color:var(--tekst-cien); display:block; margin-top:2px;}
 
     /* Karty testów */
     .sekcja{align-items:stretch;}
-    .licznik-postep{font-family:var(--pixel); font-size:13px; color:var(--neon-zolty); letter-spacing:1px; margin:4px 0 18px;}
+    .licznik-postep{font-family:var(--display); font-size:13px; color:var(--neon-zolty); letter-spacing:1px; margin:4px 0 18px;}
     .karta-testu{border:2px solid var(--ramka); background:var(--tlo-2); border-radius:10px; padding:18px 20px; margin:14px 0; max-width:70ch;}
     .karta-testu p{margin:6px 0; font-size:15px; max-width:none;}
     .karta-testu details{margin:10px 0; border:1px dashed var(--ramka); border-radius:6px; padding:8px 12px; background:rgba(0,0,0,.15);}
-    .karta-testu summary{cursor:pointer; font-family:var(--pixel); color:var(--neon-cyan); font-size:13px; letter-spacing:1px;}
+    .karta-testu summary{cursor:pointer; font-family:var(--display); color:var(--neon-cyan); font-size:13px; letter-spacing:1px;}
     .karta-testu summary:focus-visible{outline:2px solid var(--neon-zolty);}
     .karta-testu details p{margin:8px 0 2px;}
     .karta-testu .kopiuj{margin:8px 8px 8px 0;}
@@ -75,13 +80,16 @@
 
     /* Kreator własnego testu */
     .kreator{margin-top:26px; padding:18px 20px; border:2px dashed var(--neon-cyan); border-radius:10px; background:rgba(70,230,255,.05); max-width:70ch;}
-    .kreator .wzor{font-family:var(--pixel); font-size:13px; color:var(--tekst-cien); border:1px dashed var(--ramka); border-radius:6px; padding:8px 10px; display:inline-block; margin-bottom:12px; max-width:none;}
+    .kreator .wzor{font-family:var(--display); font-size:13px; color:var(--tekst-cien); border:1px dashed var(--ramka); border-radius:6px; padding:8px 10px; display:inline-block; margin-bottom:12px; max-width:none;}
     .kreator input.pole-kreatora{width:100%; max-width:520px; padding:10px 12px; font-size:15px; border-radius:6px; border:2px solid var(--ramka); background:var(--tlo); color:var(--tekst); font-family:var(--sans); margin-bottom:10px; display:block;}
     .kreator input.pole-kreatora:focus-visible{outline:none; border-color:var(--neon-cyan);}
     .flash-kreator{display:block; margin-top:8px; font-size:13px; color:var(--neon-zolty); min-height:18px;}
 
-    .nazwa-pliku{display:inline-block; max-width:100%; overflow-x:auto; white-space:nowrap; font-family:var(--pixel); color:var(--neon-magenta); padding:6px 10px; border:1px dashed var(--ramka); border-radius:6px;}
+    .nazwa-pliku{display:inline-block; max-width:100%; overflow-x:auto; white-space:nowrap; font-family:var(--display); color:var(--neon-magenta); padding:6px 10px; border:1px dashed var(--ramka); border-radius:6px;}
     .krok0-tresc{border:2px solid var(--ramka); background:var(--tlo-2); border-radius:10px; padding:18px 20px; max-width:70ch; margin:14px 0;}
+    .krok0-tresc ol.lista-krokow{margin:0; padding-left:22px; line-height:1.7;}
+    .krok0-tresc ol.lista-krokow li{margin:9px 0; font-size:16px;}
+    kbd{font-family:var(--display); font-size:13px; background:var(--tlo); color:var(--neon-cyan); border:1px solid var(--ramka); border-bottom-width:2px; border-radius:5px; padding:1px 7px; letter-spacing:.5px; white-space:nowrap;}
     .zlota-zasada-box{border:2px solid var(--neon-zolty); background:rgba(255,210,63,.06); border-radius:10px; padding:20px 24px; max-width:70ch; margin:14px 0;}
     ul.checklist-koncowa{max-width:64ch; line-height:1.9;}
   </style>
@@ -92,33 +100,39 @@
     <section id="hero">
       <h1 class="reveal">DZIEŃ 12: TESTY<br>- TWOJA SIATKA<br>BEZPIECZEŃSTWA<br>W VIBECODINGU.</h1>
       <p class="reveal">Nie czytasz kodu, który pisze za Ciebie AI? W porządku - od tego są testy. To one patrzą za Ciebie na każdą zmianę.</p>
-      <p class="reveal pixel akcent-zolty">&#9660; przewijaj w dół</p>
+      <p class="reveal display akcent-zolty">&#9660; przewijaj w dół</p>
     </section>
 
     <section id="po-co">
       <h2 class="reveal">Po co testy, skoro nie patrzysz na kod</h2>
       <p class="reveal">W vibecodingu kod za Ciebie pisze i <span class="akcent-zielony">zmienia</span> AI. Prosisz o "drobną poprawkę", a AI - bez złej woli - potrafi po drodze zepsuć coś, o co wcale nie prosiłeś. Ty tego nie zobaczysz w kodzie, bo go nie czytasz.</p>
       <p class="reveal">Dlatego testy są Twoimi <span class="akcent-zielony">oczami</span>. Nie musisz rozumieć ani jednej linijki - wystarczy, że wiesz: zielono znaczy działa, czerwono znaczy coś się zepsuło. Każda testowana reguła to obietnica, której AI musi dotrzymać.</p>
+      <p class="reveal">Ważne, <span class="akcent-zolty">gdzie</span> ten wynik czytasz. Testy automatyczne (smoke, jednostkowe, behawioralne, e2e, snapshot, dostępność) meldują się w raporcie, który zobaczysz po komendzie <em>"uruchom testy"</em> - to tam świeci się zielono albo czerwono. Sam sklep na ekranie pokazuje niewiele: ceny produktów, licznik sztuk, komunikat o dostawie, kwotę "Do zapłaty" i ekran potwierdzenia. Liczb pośrednich - sumy netto, samego VAT-u czy kwoty rabatu osobno - <span class="akcent-magenta">nie zobaczysz w sklepie</span>, i nie musisz: to właśnie ich pilnują za Ciebie testy. Dopiero ostatnia sekcja, "testy ręczne", każe patrzeć na ekran własnymi oczami.</p>
       <p class="reveal">Umiejętność, którą tu ćwiczysz, to <span class="akcent-magenta">opisywanie testu słowami</span>: mówisz po polsku, co ma być prawdą, a AI zamienia to na kod testu. Nie uczysz się pisać testów ręcznie - uczysz się je precyzyjnie zamawiać.</p>
     </section>
 
     <section id="piramida">
       <h2 class="reveal">Piramida i mapa testów</h2>
-      <p class="reveal">To <span class="akcent-zolty">rozszerzona</span> piramida - nie myl jej z klasycznymi 3 poziomami znanymi z innych kursów. Trzy typy idą od tanich i szybkich na dole po drogie i wolne na górze; trzy kolejne stoją z boku, bo nie mieszczą się na osi "tanie kontra drogie".</p>
+      <p class="reveal">Klasyczna <strong>piramida testów</strong> - standardowy model, który spotkasz w większości kursów i książek o programowaniu - ma tylko 3 poziomy, ułożone od tanich i szybkich na dole po drogie i wolne na górze (jednostkowe, integracyjne, e2e). To jest jej <span class="akcent-zolty">rozszerzona</span> wersja: zostawiamy tę oś "tanie kontra drogie", ale dokładamy do niej wszystko, czego klasyczna piramida nie obejmuje - w sumie 7 typów testów.</p>
+      <p class="brama-etykieta reveal">Jak te 7 typów układa się na mapie - 1 brama na starcie, 3 na osi piramidy, 3 z boku:</p>
+      <a href="#sekcja-smoke" class="brama-startowa reveal">
+        <span class="etq">Smoke - brama startowa (1)</span>
+        <span class="opis">Uruchamiasz ją najpierw. Sprawdza tylko, czy apka w ogóle wstaje. Nie leży na osi "tanie kontra drogie" - to szybki strażnik przed wejściem na piramidę.</span>
+      </a>
       <div class="piramida-wizual reveal">
         <a href="#sekcja-e2e" class="warstwa warstwa-e2e"><span class="etq">E2E</span><span class="opis">drogie i wolne - cały przepływ jak użytkownik</span></a>
         <a href="#sekcja-behawioralne" class="warstwa warstwa-behawioralne"><span class="etq">Behawioralne</span><span class="opis">reguły biznesowe - mając / gdy / wtedy</span></a>
         <a href="#sekcja-jednostkowe" class="warstwa warstwa-jednostkowe"><span class="etq">Jednostkowe</span><span class="opis">tanie i szybkie - najwięcej ich</span></a>
       </div>
       <div class="poza-osia reveal">
-        <p class="etykieta-poza-osia">Z boku - poza osią "tanie -&gt; drogie" (każdy mierzy coś innego):</p>
+        <p class="etykieta-poza-osia">Z boku - 3 typy poza osią "tanie -&gt; drogie" (każdy mierzy coś innego):</p>
         <div class="chipy-poza-osia">
           <a href="#sekcja-snapshot" class="chip">Snapshot<br><small>wygląd ekranu</small></a>
           <a href="#sekcja-a11y" class="chip">Dostępność<br><small>a11y</small></a>
           <a href="#sekcja-reczne" class="chip">Ręczne<br><small>ocena człowieka</small></a>
         </div>
       </div>
-      <p class="reveal">Dlaczego aż 7, a nie klasyczne 3 (jednostkowe / integracyjne / e2e)? Bo w realnym projekcie liczy się też wygląd, dostępność i osąd człowieka - a tych klasyczna piramida w ogóle nie obejmuje. Każda z 7 sekcji niżej ma własną kartę promptów.</p>
+      <p class="reveal">Dlaczego 7, a nie klasyczne 3? Bo w prawdziwym projekcie liczy się też wygląd, dostępność i osąd człowieka, a tego oś "tanie kontra drogie" nie zmierzy - dlatego snapshot, dostępność i testy ręczne stoją z boku. Jest też różnica w samym środku osi: tam, gdzie klasyczna piramida stawia testy integracyjne, my stawiamy behawioralne (reguły biznesowe) - bo są najbliżej opisywania testu słowami, czego uczy ten warsztat. Razem: 1 brama (smoke) + 3 na osi + 3 z boku = 7, a każda z tych 7 sekcji niżej ma własną kartę promptów.</p>
     </section>
 
     <section id="krok0">
@@ -129,7 +143,23 @@
         <button class="retro kopiuj" id="btn-krok0">Kopiuj polecenie Kroku 0</button>
       </div>
       <p class="reveal">Zapamiętaj też drugie zdanie - reset. Ilekroć coś zepsujesz i chcesz wrócić do stanu wyjściowego, mówisz do Claude Code: <em id="reset-tekst-inline"></em>. Każda karta poniżej ma własny przycisk, który to kopiuje za Ciebie.</p>
-      <p class="reveal">Chcesz <strong>zobaczyć</strong> apkę w przeglądarce (przyda się przy testach ręcznych)? Powiedz Claude Code <em>"uruchom podgląd sklepu"</em> i otwórz <span class="nazwa-pliku">http://localhost:8080</span>. Nie otwieraj pliku dwuklikiem - adres <span class="nazwa-pliku">file://</span> pokaże pusty katalog, bo przeglądarka blokuje moduły JavaScript wczytywane prosto z dysku.</p>
+      <p class="reveal">Chcesz <strong>zobaczyć</strong> apkę w przeglądarce (przyda się przy testach ręcznych)? Powiedz Claude Code <em>"uruchom podgląd sklepu"</em> i otwórz <span class="nazwa-pliku">http://localhost:8080</span>. Nie otwieraj pliku dwuklikiem - adres <span class="nazwa-pliku">file://</span> pokaże pusty katalog, bo przeglądarka blokuje moduły JavaScript wczytywane prosto z dysku. A jeśli chcesz zobaczyć, jak sklep wygląda na telefonie - pokazuje to następna sekcja, bez potrzeby sięgania po prawdziwy telefon.</p>
+    </section>
+
+    <section id="podglad-telefonu">
+      <h2 class="reveal">Podgląd telefonu - jak zobaczyć widok mobilny na komputerze</h2>
+      <p class="reveal">W sekcji "testy ręczne" oceniasz między innymi, czy apka dobrze wygląda na telefonie. Nie potrzebujesz do tego prawdziwego telefonu - każda przeglądarka (Chrome, Edge) ma wbudowany tryb telefonu. Nie musisz rozumieć niczego z tego, co się otworzy; wystarczy, że klikniesz po kolei poniższe kroki.</p>
+      <div class="krok0-tresc reveal">
+        <ol class="lista-krokow">
+          <li>Otwórz podgląd sklepu w Chrome lub Edge - adres <span class="nazwa-pliku">http://localhost:8080</span> z Kroku 0.</li>
+          <li>Naciśnij klawisz <kbd>F12</kbd>, albo kliknij prawym przyciskiem myszy w dowolnym miejscu strony i wybierz <em>Zbadaj</em> / <em>Inspect</em>. Z boku (lub na dole) otworzy się panel dla programistów - możesz go spokojnie zignorować.</li>
+          <li>W tym panelu, u samej góry, kliknij ikonę telefonu i tabletu (dwa nałożone prostokąty; po najechaniu myszą pokazuje się podpowiedź <em>Toggle device toolbar</em>). Skrót na klawiaturze: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd>.</li>
+          <li>Strona zwęzi się do rozmiaru telefonu. Nad nią pojawi się lista z modelami - wybierz np. <em>iPhone SE</em>, albo w polu szerokości wpisz <strong>375</strong>. To typowa szerokość telefonu - dokładnie ta sama, o której mówi ostatni test ręczny niżej.</li>
+          <li>Teraz widzisz to, co zobaczyłby ktoś na telefonie. Sprawdź okiem: czy nic nie wychodzi poza ekran, czy nie trzeba przewijać w bok i czy wszystkie przyciski dają się wygodnie kliknąć.</li>
+          <li>Żeby wrócić do zwykłego widoku: kliknij ikonę telefonu jeszcze raz, a panel programisty zamknij ponownym naciśnięciem <kbd>F12</kbd>.</li>
+        </ol>
+      </div>
+      <p class="reveal">To właśnie ten widok wyłapuje błąd z ostatniej karty sekcji "testy ręczne": panel, który na szerokim ekranie komputera wygląda dobrze, na 375 px potrafi wyjść poza ekran telefonu. Żaden automat tego nie zobaczy - tylko Ty w trybie telefonu.</p>
     </section>
 
     <div id="sekcje"><!-- 7 sekcji renderowanych z tablicy SEKCJE --></div>
@@ -137,7 +167,7 @@
     <section id="zlota-zasada">
       <h2 class="reveal">Złota zasada</h2>
       <div class="zlota-zasada-box reveal">
-        <p class="pixel akcent-zolty" style="font-size:18px;">Zielone testy to nie to samo co dobry produkt.</p>
+        <p class="display akcent-zolty" style="font-size:18px;">Zielone testy to nie to samo co dobry produkt.</p>
         <p>Automat sprawdza tylko to, o co go poprosiłeś. Sekcja "testy ręczne" pokazała Ci trzy przypadki, w których wszystkie automaty świecą się na zielono, a mimo to produkt jest zły: niejasny komunikat, dziwna kolejność pól, panel wychodzący poza ekran telefonu. Te rzeczy złapie tylko człowiek - Ty.</p>
       </div>
       <p class="reveal">Co dalej: przejdź cały bank promptów po kolei, zaznaczaj postęp checkboxem przy każdej karcie i układaj własne testy w kreatorach na końcu każdej sekcji. Gdy skończysz, Twoja apka ma pełny komplet 7 typów testów - i Ty wiesz, co każdy z nich pilnuje.</p>
@@ -162,124 +192,146 @@
     const SEKCJE = [
       {
         id: 'smoke', tytul: 'Smoke test',
-        coToPoco: 'Najprostszy test: czy apka w ogóle się ładuje i nie wywala błędu. Pierwszy krok, buduje pewność.',
+        coToPoco: 'Najprostszy z możliwych testów: sprawdza tylko, czy apka w ogóle wstaje - czy strona się ładuje, rysuje swoje elementy i nie wyrzuca błędu, który by ją zabił. Nie ocenia żadnych liczb ani reguł biznesowych; jest jak sprawdzenie "czy urządzenie w ogóle się włącza". Dlatego to zawsze pierwszy test, który uruchamiasz - gdy smoke jest czerwony, nie ma sensu patrzeć na resztę, bo coś jest zepsute u samych fundamentów.',
         kreator: 'Dopisz test smoke: po otwarciu strony element ___ jest widoczny.',
         karty: [
           { nazwa: 'Strona ładuje się i widać 4 produkty',
-            coSprawdza: 'Widać 4 karty produktu i konsola nie zgłasza błędu.',
+            coSprawdza: 'Po wejściu na stronę w kontenerze katalogu pojawiają się 4 karty produktów (Kubek, Koszulka, Plakat, Naklejka), a konsola przeglądarki nie zgłasza żadnego błędu JavaScript. To absolutne minimum, które musi działać, zanim jakikolwiek inny test ma sens.',
             promptLamiacy: 'Zmień w index.html ścieżkę skryptu z src/ui.js na src/ui-new.js.',
-            oczekiwanie: 'Katalog pusty, test smoke (4 karty) czerwony.',
-            pewniak: 'Usuń z index.html kontener katalogu <div id="katalog">.' },
+            oczekiwanie: 'Przeglądarka szuka pliku, którego nie ma, więc katalog w ogóle się nie renderuje - zamiast 4 kart widać pusty obszar, a test smoke robi się czerwony (znalazł 0 kart zamiast 4).',
+            pewniak: 'Usuń z index.html kontener katalogu <div id="katalog">. Bez niego skrypt nie ma gdzie wstawić produktów, więc katalog znika na pewno - nawet jeśli AI ostrożnie potraktował poprzedni prompt.' },
         ],
       },
       {
         id: 'jednostkowe', tytul: 'Testy jednostkowe',
-        coToPoco: 'Sprawdzają pojedyncze funkcje liczące (suma, VAT, rabat) w oderwaniu od UI. Tanie i szybkie.',
+        coToPoco: 'Testy jednostkowe biorą jedną funkcję liczącą (suma pozycji, VAT, rabat) i sprawdzają ją w izolacji: podają jej konkretne wejście i porównują wynik z oczekiwaną liczbą. Nie klikają w nic i nie ładują całej strony, dlatego są najtańsze i najszybsze - w piramidzie jest ich najwięcej. To Twoja siatka na błędy w rachunkach: literówkę w stawce VAT albo pomylone "plus" z "razy" łapią w ułamku sekundy. Uwaga: te liczby (suma netto, VAT, rabat) żyją wewnątrz funkcji - w sklepie ich nie zobaczysz, więc wynik czytasz z raportu "uruchom testy", nie z ekranu.',
         kreator: 'Dopisz test jednostkowy: dla wejścia ___ wynik funkcji ___ powinien być ___.',
         karty: [
-          { nazwa: '3 × Kubek = 75 zł netto', coSprawdza: 'Suma pozycji = cena × ilość.',
+          { nazwa: '3 × Kubek = 75 zł netto',
+            coSprawdza: 'Funkcja sumaNetto mnoży cenę produktu przez ilość i sumuje pozycje: 3 kubki po 25 zł mają dać dokładnie 75 zł netto. Sprawdzamy sam rachunek pozycji, jeszcze bez rabatu, VAT-u i kosztu dostawy. Tej sumy netto sklep nie wyświetla - test odczytuje ją wprost z funkcji, więc jej wynik zobaczysz w raporcie "uruchom testy", a nie na ekranie sklepu.',
             promptLamiacy: 'Dodaj rabat ilościowy: przy 3+ szt. tego samego produktu licz pozycję 10% taniej.',
-            oczekiwanie: 'suma = 67,50 zamiast 75, test U1 czerwony.',
+            oczekiwanie: 'Rabat ilościowy zbija cenę o 10%, więc funkcja zwraca 67,50 zamiast 75 - test jednostkowy U1 (3 × Kubek = 75) robi się czerwony, bo oczekiwał równo 75.',
             pewniak: 'W funkcji sumy pozycji dodawaj cenę i ilość zamiast mnożyć.' },
-          { nazwa: 'VAT 23% z 75 = 17,25 (brutto 92,25)', coSprawdza: 'vat() = 23% od netto po rabacie.',
+          { nazwa: 'VAT 23% z 75 = 17,25 (brutto 92,25)',
+            coSprawdza: 'Funkcja vat liczy 23% od kwoty netto (po ewentualnym rabacie): od 75 zł powinno wyjść 17,25 zł VAT, czyli 92,25 zł brutto. Test pilnuje, żeby stawka i zaokrąglenie do groszy się nie rozjechały.',
             promptLamiacy: 'Zaokrąglaj kwotę VAT w dół do pełnych złotych, żeby ceny ładniej wyglądały.',
-            oczekiwanie: 'oczekiwano 17,25, było 17,00.', pewniak: 'Ustaw stawkę VAT na 0.' },
-          { nazwa: 'VIBE10 daje -10% od netto: ze 100 -> 10', coSprawdza: 'rabat() = 10% od sumy netto.',
+            oczekiwanie: 'Po zaokrągleniu VAT w dół do pełnych złotych zamiast 17,25 wychodzi 17,00 - test U2 czerwony, bo oczekiwał dokładnie 17,25.',
+            pewniak: 'Ustaw stawkę VAT na 0.' },
+          { nazwa: 'VIBE10 daje -10% od netto: ze 100 -> 10',
+            coSprawdza: 'Funkcja rabat z kodem VIBE10 odejmuje 10% od sumy netto towarów: dla koszyka za 100 zł rabat ma wynieść dokładnie 10 zł. Sprawdzamy tu wysokość rabatu, a nie to, czy sam kod jest w ogóle rozpoznawany.',
             promptLamiacy: 'Zmień rabat VIBE10 z 10% na 15%.',
-            oczekiwanie: 'oczekiwano rabat 10, było 15.', pewniak: 'Ustaw rabat VIBE10 na 50%.' },
-          { nazwa: 'Pusty koszyk: suma() = liczba 0', coSprawdza: 'sumaNetto([]) === 0 i jest liczbą.',
+            oczekiwanie: 'Rabat podniesiony do 15% daje 15 zł zamiast 10 - test U3 czerwony, bo oczekiwał rabatu równego 10.',
+            pewniak: 'Ustaw rabat VIBE10 na 50%.' },
+          { nazwa: 'Pusty koszyk: suma() = liczba 0',
+            coSprawdza: 'Dla pustego koszyka suma netto ma być liczbą 0 - i to naprawdę typu "liczba", a nie null czy pusty tekst. To pilnuje, żeby kolejne rachunki (VAT, dostawa) nie dostały czegoś, na czym się wywrócą.',
             promptLamiacy: 'Gdy koszyk jest pusty, niech funkcja sumy zwraca null zamiast 0.',
-            oczekiwanie: 'test typeof / === 0 czerwony.', pewniak: 'Niech suma() dla pustego koszyka rzuca wyjątek.' },
-          { nazwa: '3 × Naklejka = 30 netto, VAT 6,90', coSprawdza: 'vat(30) === 6,90.',
+            oczekiwanie: 'Funkcja zwraca null zamiast 0, więc sprawdzenie "czy to liczba" oraz "czy równe 0" nie przechodzi - test U4 robi się czerwony.',
+            pewniak: 'Niech suma() dla pustego koszyka rzuca wyjątek.' },
+          { nazwa: '3 × Naklejka = 30 netto, VAT 6,90',
+            coSprawdza: 'Trzy naklejki po 10 zł to 30 zł netto, a 23% VAT od tego to 6,90 zł. Ten sam mechanizm co przy kubkach, tylko na innych liczbach - żeby błąd w stawce dało się złapać na więcej niż jednym przykładzie.',
             promptLamiacy: 'Licz VAT jako 20% zamiast 23%, bo to prostsze.',
-            oczekiwanie: 'oczekiwano 6,90, było 6,00.', pewniak: 'Ustaw stawkę VAT na 10%.' },
+            oczekiwanie: 'Przy stawce 20% zamiast 23% wychodzi 6,00 zł zamiast 6,90 - test U5 czerwony, bo oczekiwał 6,90.',
+            pewniak: 'Ustaw stawkę VAT na 10%.' },
         ],
       },
       {
         id: 'behawioralne', tytul: 'Testy behawioralne (BDD)',
-        coToPoco: 'Opisują regułę biznesową w języku "mając... gdy... wtedy...". Najbliżej opisu słowami.',
+        coToPoco: 'Testy behawioralne (BDD) opisują całą regułę biznesową w ludzkim schemacie "mając... gdy... wtedy...": mając taki koszyk, gdy zrobię to, wtedy ma się stać tamto. Są najbliżej tego, czego uczysz się na tym warsztacie - opisywania testu zwykłymi słowami. Sprawdzają nie pojedynczą funkcję, lecz sensowność zachowania: darmową dostawę od progu, kod rabatowy tylko dla niepustego koszyka, zablokowany przycisk przy pustym koszyku.',
         kreator: 'Dopisz test behawioralny: mając ___, gdy ___, wtedy ___.',
         karty: [
-          { nazwa: 'Koszyk 200 zł netto (5×Plakat) -> darmowa dostawa', coSprawdza: 'dostawa = 0 gdy netto ≥ 200.',
+          { nazwa: 'Koszyk 200 zł netto (5×Plakat) -> darmowa dostawa',
+            coSprawdza: 'Reguła: od 200 zł netto dostawa jest darmowa. Pięć plakatów po 40 zł to równo 200 zł, więc koszt dostawy ma spaść z 15 zł do 0. Test pilnuje samego progu - czy "200 i więcej" faktycznie obejmuje też równe 200.',
             promptLamiacy: 'Zmień zasadę: darmowa dostawa dopiero powyżej 200 zł, nie od 200.',
-            oczekiwanie: 'na progu 200 dostawa 15 zamiast 0, test B1 czerwony.',
+            oczekiwanie: 'Po zmianie na "dopiero powyżej 200" kwota równa 200 zł nie łapie już darmowej dostawy - dochodzi 15 zł, test B1 czerwony. To klasyczny błąd "o jeden": "większe" zamiast "większe lub równe".',
             pewniak: 'Podnieś próg darmowej dostawy do 500 zł.' },
-          { nazwa: 'Pusty koszyk + VIBE10 -> rabat NIE aktywny', coSprawdza: 'podsumowanie([], VIBE10).rabatAktywny === false.',
+          { nazwa: 'Pusty koszyk + VIBE10 -> rabat NIE aktywny',
+            coSprawdza: 'Kod VIBE10 ma działać tylko dla niepustego koszyka. Dla pustego koszyka znacznik rabatAktywny ma być false - żeby apka nie chwaliła się rabatem naliczonym od zera złotych.',
             promptLamiacy: 'Aktywuj kod VIBE10 także dla pustego koszyka i pokazuj komunikat "Rabat naliczony".',
-            oczekiwanie: 'rabatAktywny = true dla pustego koszyka, test B2 czerwony.',
+            oczekiwanie: 'Rabat aktywuje się nawet przy pustym koszyku, więc rabatAktywny robi się true - test B2 czerwony, bo oczekiwał false.',
             pewniak: 'Usuń warunek niepustego koszyka - VIBE10 zawsze ustawia flagę rabatu na true.' },
-          { nazwa: 'Pusty koszyk -> przycisk zamówienia nieaktywny', coSprawdza: '#zloz-zamowienie ma disabled przy pustym koszyku.',
+          { nazwa: 'Pusty koszyk -> przycisk zamówienia nieaktywny',
+            coSprawdza: 'Gdy koszyk jest pusty, przycisk "Złóż zamówienie" (#zloz-zamowienie) ma być nieaktywny (atrybut disabled) - nie da się zamówić pustego koszyka. Test sprawdza obecność tego atrybutu przy zerowej liczbie produktów.',
             promptLamiacy: 'Niech przycisk "Złóż zamówienie" będzie zawsze aktywny.',
-            oczekiwanie: 'przycisk aktywny mimo pustego koszyka, test B3 czerwony.',
+            oczekiwanie: 'Przycisk jest zawsze aktywny, więc przy pustym koszyku brakuje atrybutu disabled - test B3 czerwony.',
             pewniak: 'Usuń całą logikę wyłączania przycisku zamówienia.' },
-          { nazwa: 'Rabat od towaru (100), nie od towaru+dostawa', coSprawdza: 'kwotaRabatu = 10 dla koszyka 100 netto z VIBE10.',
+          { nazwa: 'Rabat od towaru (100), nie od towaru+dostawa',
+            coSprawdza: 'Rabat VIBE10 liczy się od wartości samych towarów (100 zł -> 10 zł), a nie od towarów razem z dostawą. Test pilnuje podstawy naliczania rabatu, żeby klient nie dostawał rabatu również od kosztu przesyłki.',
             promptLamiacy: 'Licz rabat od całej kwoty razem z dostawą.',
-            oczekiwanie: 'rabat 11,50 zamiast 10, test B4 czerwony.',
+            oczekiwanie: 'Rabat liczony od 115 zł (100 zł towaru + 15 zł dostawy) daje 11,50 zamiast 10 - test B4 czerwony.',
             pewniak: 'Do podstawy rabatu VIBE10 dolicz koszt dostawy.' },
         ],
       },
       {
         id: 'e2e', tytul: 'Testy E2E (Playwright)',
-        coToPoco: 'Przechodzą całą apkę jak użytkownik: klikają, wpisują, sprawdzają wynik na ekranie.',
+        coToPoco: 'Testy E2E (end-to-end, w narzędziu Playwright) przechodzą apkę tak jak żywy użytkownik: otwierają stronę, klikają przyciski, wpisują dane do formularza i sprawdzają, co pojawia się na ekranie. Dają największą pewność, bo obejmują całą drogę zakupu naraz - ale są najdroższe i najwolniejsze, dlatego w piramidzie jest ich najmniej. Uruchamiają w tle prawdziwą przeglądarkę, więc łapią też błędy w sklejeniu logiki z interfejsem.',
         kreator: 'Dopisz test e2e: gdy kliknę ___ i wpiszę ___, wtedy na ekranie pojawi się ___.',
         karty: [
-          { nazwa: 'Dodaj 2 produkty -> dane -> zamówienie -> potwierdzenie', coSprawdza: 'Po złożeniu widać #potwierdzenie z numerem ZAM-.',
+          { nazwa: 'Dodaj 2 produkty -> dane -> zamówienie -> potwierdzenie',
+            coSprawdza: 'Pełna ścieżka zakupu: dodaj 2 produkty, wpisz dane, złóż zamówienie - a na końcu ma pojawić się ekran potwierdzenia (#potwierdzenie) z numerem zaczynającym się od "ZAM-". To sprawdza, że cały przepływ dowozi klienta aż do samego końca.',
             promptLamiacy: 'Po kliknięciu "Złóż zamówienie" nie pokazuj ekranu potwierdzenia, tylko wyczyść koszyk.',
-            oczekiwanie: 'brak potwierdzenia, test E1 czerwony.',
+            oczekiwanie: 'Po kliknięciu "Złóż zamówienie" koszyk się czyści, ale ekran potwierdzenia się nie pokazuje - test E1 czerwony, bo nie znajduje #potwierdzenie z numerem ZAM-.',
             pewniak: 'Ustaw ekran #potwierdzenie na stałe ukryty (display:none).' },
-          { nazwa: 'E-mail bez @ blokuje zamówienie', coSprawdza: 'Zły e-mail nie pokazuje potwierdzenia, pokazuje błąd.',
+          { nazwa: 'E-mail bez @ blokuje zamówienie',
+            coSprawdza: 'Formularz ma blokować e-mail bez znaku @: przy błędnym adresie zamówienie nie przechodzi, a użytkownik dostaje komunikat błędu zamiast potwierdzenia. Test sprawdza, że walidacja naprawdę zatrzymuje zamówienie.',
             promptLamiacy: 'Usuń walidację e-maila, przyjmuj dowolny tekst.',
-            oczekiwanie: 'potwierdzenie mimo złego e-maila, test E2 czerwony.',
+            oczekiwanie: 'Bez walidacji byle tekst przechodzi jako e-mail, więc pojawia się potwierdzenie mimo błędnego adresu - test E2 czerwony.',
             pewniak: 'Zawsze pomijaj walidację formularza.' },
-          { nazwa: 'Dodanie produktu zwiększa licznik', coSprawdza: '#licznik-koszyka rośnie z 0 na 1.',
+          { nazwa: 'Dodanie produktu zwiększa licznik',
+            coSprawdza: 'Dodanie produktu do koszyka ma podbić licznik przy ikonie koszyka (#licznik-koszyka) z 0 na 1. Prosty sprawdzian, że akcja "dodaj" faktycznie dokłada rzecz do koszyka i że interfejs od razu to pokazuje.',
             promptLamiacy: 'Po dodaniu produktu odświeżaj całą stronę.',
-            oczekiwanie: 'licznik wraca do 0, test E3 czerwony.',
+            oczekiwanie: 'Odświeżenie całej strony po dodaniu produktu zeruje koszyk, więc licznik wraca do 0 zamiast pokazać 1 - test E3 czerwony.',
             pewniak: 'Po dodaniu produktu ustaw licznik koszyka na 0.' },
-          { nazwa: 'Potwierdzenie pokazuje kwotę z rabatem', coSprawdza: '#kwota-potwierdzenie = doZaplaty z rabatem (221,40).',
+          { nazwa: 'Potwierdzenie pokazuje kwotę z rabatem',
+            coSprawdza: 'Na ekranie potwierdzenia kwota do zapłaty (#kwota-potwierdzenie) ma być tą policzoną z rabatem i VAT-em - w tym scenariuszu 221,40 zł. Test pilnuje, że klient widzi kwotę faktycznie naliczoną, a nie surowe netto.',
             promptLamiacy: 'Na potwierdzeniu pokazuj zawsze sumę netto, bez rabatu i VAT.',
-            oczekiwanie: 'kwota inna niż 221,40 zł, test E4 czerwony.',
+            oczekiwanie: 'Potwierdzenie pokazuje samą sumę netto (bez rabatu i VAT), więc kwota jest inna niż 221,40 zł - test E4 czerwony.',
             pewniak: 'Na potwierdzeniu pokaż zawsze 0 zł.' },
         ],
       },
       {
         id: 'snapshot', tytul: 'Regresja wizualna (snapshot)',
-        coToPoco: 'Robi zrzut ekranu i porównuje z wzorcem - automat wykrywa, że coś się rozjechało wizualnie.',
+        coToPoco: 'Regresja wizualna (snapshot) robi zdjęcie fragmentu ekranu i porównuje je piksel po pikselu z zatwierdzonym wcześniej wzorcem (baseline). Wychwytuje to, czego testy liczbowe nie widzą: że coś rozjechało się wizualnie - przesunęło, zmieniło kolor, urosło. Wynik jest zielony, dopóki wygląd zgadza się ze wzorcem; każda widoczna zmiana świeci na czerwono, także ta, której wcale nie planowałeś.',
         kreator: 'Dopisz test snapshot: wygląd elementu ___ ma zgadzać się z zatwierdzonym zrzutem.',
         karty: [
-          { nazwa: 'Panel podsumowania zgodny ze zrzutem', coSprawdza: 'Wygląd #podsumowanie zgadza się z baseline.',
+          { nazwa: 'Panel podsumowania zgodny ze zrzutem',
+            coSprawdza: 'Wygląd panelu podsumowania (#podsumowanie) ma zgadzać się co do piksela z zatwierdzonym zrzutem wzorcowym. Test nie rozumie, co znaczą liczby w panelu - porównuje sam obraz z wzorcem.',
             promptLamiacy: 'Powiększ mocno sumę i zrób ją czerwoną, żeby rzucała się w oczy.',
-            oczekiwanie: 'pixel diff, test V1 czerwony.',
+            oczekiwanie: 'Powiększona, czerwona suma zmienia obraz panelu, więc porównanie z wzorcem wykrywa różnicę pikseli - test V1 czerwony, mimo że sama matematyka jest nadal poprawna.',
             pewniak: 'Ukryj cały panel podsumowania (display:none).' },
         ],
       },
       {
         id: 'a11y', tytul: 'Dostępność (a11y)',
-        coToPoco: 'Sprawdza, czy apka jest obsługiwalna dla wszystkich: etykiety przycisków, kontrast, klawiatura.',
+        coToPoco: 'Testy dostępności (a11y) sprawdzają, czy z apki da się korzystać także bez myszki i bez dobrego wzroku: czy przyciski mają czytelną nazwę dla czytnika ekranu, czy kontrast jest wystarczający, czy wszystko da się obsłużyć z klawiatury. Uruchamia je silnik axe - ten sam, którego używają zawodowe audyty dostępności. To nie fanaberia: dla części użytkowników taki tryb to jedyny sposób, żeby w ogóle zrobić zakupy.',
         kreator: 'Dopisz test dostępności: element ___ ma mieć dostępną nazwę / wystarczający kontrast.',
         karty: [
-          { nazwa: 'Przyciski "Dodaj" mają dostępną nazwę', coSprawdza: 'axe nie zgłasza button-name w #katalog.',
+          { nazwa: 'Przyciski "Dodaj" mają dostępną nazwę',
+            coSprawdza: 'Każdy przycisk "Dodaj do koszyka" w katalogu (#katalog) ma mieć dostępną nazwę - tekst albo aria-label - którą odczyta czytnik ekranu. Silnik axe zgłasza regułę button-name, gdy trafi na przycisk-zagadkę bez żadnej nazwy.',
             promptLamiacy: 'Zamień przyciski "Dodaj do koszyka" na same ikony koszyka, bez tekstu - żeby było nowocześnie.',
-            oczekiwanie: 'axe zgłasza button-name, test A1 czerwony.',
+            oczekiwanie: 'Z przycisków został sam obrazek bez tekstu i bez aria-label, więc axe zgłasza naruszenie reguły button-name (przycisk bez dostępnej nazwy) - test A1 czerwony.',
             pewniak: 'Usuń z przycisków "Dodaj" tekst i aria-label, a w środku wstaw ikonę <svg> bez tekstu i bez aria-label. (Samo emoji NIE wystarcza - axe liczy je jak tekst.)' },
         ],
       },
       {
         id: 'reczne', tytul: 'Testy ręczne (twist)',
-        coToPoco: 'To, czego żaden automat nie złapie. Zielone testy to nie to samo co dobry produkt - tu ocenia człowiek.',
+        coToPoco: 'Testy ręczne to sekcja o twiście całego dnia: zielone testy to nie to samo co dobry produkt. Automat sprawdza tylko to, o co go wprost poprosiłeś - nie oceni, czy komunikat jest zrozumiały, czy kolejność pól jest naturalna, czy na telefonie nic nie wyłazi poza ekran. Tu jedynym testem jesteś Ty: patrzysz na apkę okiem użytkownika i wystawiasz PASS albo FAIL. Każdy z trzech przykładów niżej zostawia wszystkie automaty na zielono, a mimo to produkt jest gorszy.',
         kreator: 'Dopisz pozycję checklisty ręcznej: sprawdź, czy ___ (PASS = spełnia, FAIL = nie).',
         karty: [
-          { nazwa: 'Komunikat o dostawie zrozumiały (kwota + waluta)', coSprawdza: 'CZŁOWIEK: "Do darmowej dostawy brakuje 12,00 zł".',
+          { nazwa: 'Komunikat o dostawie zrozumiały (kwota + waluta)',
+            coSprawdza: 'OCENA CZŁOWIEKA: komunikat o darmowej dostawie ma być zrozumiały - z kwotą i walutą, np. "Do darmowej dostawy brakuje 12,00 zł". Żaden automat nie oceni, czy zdanie jest jasne dla klienta.',
             promptLamiacy: 'Skróć komunikat o darmowej dostawie do "Brakuje: 12".',
-            oczekiwanie: 'Automaty ZIELONE, człowiek: FAIL (brak waluty, niejasne).',
-            pewniak: 'Brak - to test ręczny, żaden automat go nie łapie. O to właśnie chodzi.' },
-          { nazwa: 'Kolejność pól formularza naturalna', coSprawdza: 'CZŁOWIEK: imię -> e-mail -> adres.',
+            oczekiwanie: 'Skrócony komunikat "Brakuje: 12" nadal przechodzi wszystkie automaty (liczba się zgadza), ale człowiek daje FAIL: brak waluty i kontekstu, klient nie wie, o co chodzi.',
+            pewniak: 'Brak - to test ręczny, żaden automat go nie łapie. O to właśnie w tej sekcji chodzi.' },
+          { nazwa: 'Kolejność pól formularza naturalna',
+            coSprawdza: 'OCENA CZŁOWIEKA: pola formularza mają iść w naturalnej kolejności - imię, potem e-mail, potem adres. Kod zadziała przy dowolnej kolejności, ale nienaturalna kolejność męczy i myli użytkownika.',
             promptLamiacy: 'Przenieś pole adres przed imię.',
-            oczekiwanie: 'Działa, testy zielone, ale UX dziwny.',
-            pewniak: 'Brak - ocena ludzka.' },
-          { nazwa: 'Na telefonie (375px) nic nie wychodzi poza ekran', coSprawdza: 'CZŁOWIEK: layout mobilny nie przepełnia się.',
+            oczekiwanie: 'Po przeniesieniu adresu przed imię apka działa i wszystkie testy są zielone, ale wypełnianie formularza staje się nienaturalne - człowiek daje FAIL za UX.',
+            pewniak: 'Brak - to ocena ludzka; automat nie ma pojęcia o "naturalnej" kolejności pól.' },
+          { nazwa: 'Na telefonie (375px) nic nie wychodzi poza ekran',
+            coSprawdza: 'OCENA CZŁOWIEKA: na wąskim ekranie telefonu (ok. 375 px szerokości) nic nie ma wychodzić poza ekran ani wymuszać przewijania w bok. Snapshot robiony na szerokim ekranie tego nie zobaczy - trzeba spojrzeć na widok mobilny (jak go włączyć, opisuje sekcja "Podgląd telefonu" wyżej).',
             promptLamiacy: 'Dodaj styl tylko dla telefonów: w media query max-width 480px ustaw #podsumowanie na stałą szerokość 600px.',
-            oczekiwanie: 'Automaty ZIELONE (snapshot na desktopie 1000px nietknięty), ale na telefonie panel 600px wychodzi poza ekran 375px - łapie tylko człowiek.',
-            pewniak: 'Brak - ocena ludzka. (Zweryfikowane: bez media query prosta stała szerokość psuje też snapshot V1, więc zmiana MUSI być mobile-only.)' },
+            oczekiwanie: 'Automaty są ZIELONE (snapshot na desktopie 1000 px pozostaje nietknięty), ale na telefonie panel o sztywnej szerokości 600 px wychodzi poza ekran 375 px - łapie to tylko człowiek oglądający widok mobilny.',
+            pewniak: 'Brak - ocena ludzka. (Zweryfikowane: bez media query prosta stała szerokość psuje też snapshot V1, więc zmiana MUSI być tylko dla telefonów.)' },
         ],
       },
     ];
