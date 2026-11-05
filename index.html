@@ -88,6 +88,7 @@
     .nazwa-pliku{display:inline-block; max-width:100%; overflow-x:auto; white-space:nowrap; font-family:var(--display); color:var(--neon-magenta); padding:6px 10px; border:1px dashed var(--ramka); border-radius:6px;}
     .krok0-tresc{border:2px solid var(--ramka); background:var(--tlo-2); border-radius:10px; padding:18px 20px; max-width:70ch; margin:14px 0;}
     .krok0-tresc ol.lista-krokow{margin:0; padding-left:22px; line-height:1.7;}
+    .link-neon{color:var(--neon-zielony); font-weight:600;} .link-neon:hover, .link-neon:focus-visible{color:var(--neon-cyan);}
     .krok0-tresc ol.lista-krokow li{margin:9px 0; font-size:16px;}
     kbd{font-family:var(--display); font-size:13px; background:var(--tlo); color:var(--neon-cyan); border:1px solid var(--ramka); border-bottom-width:2px; border-radius:5px; padding:1px 7px; letter-spacing:.5px; white-space:nowrap;}
     .zlota-zasada-box{border:2px solid var(--neon-zolty); background:rgba(255,210,63,.06); border-radius:10px; padding:20px 24px; max-width:70ch; margin:14px 0;}
@@ -137,18 +138,19 @@
 
     <section id="krok0">
       <h2 class="reveal">Krok 0 - przygotuj poligon</h2>
-      <p class="reveal">Zanim zaczniesz cokolwiek łamać, otwórz folder <span class="nazwa-pliku">sklep/</span> w Claude Code i wklej poniższe polecenie. AI samo zainstaluje zależności, uruchomi testy i pokaże Ci zielony start.</p>
+      <p class="reveal">Sklep do testowania pobierzesz na swój komputer jednym poleceniem. Utwórz <strong>pusty</strong> folder na ćwiczenia (np. <span class="nazwa-pliku">C:\poligon-testy</span>), otwórz go w Claude Code i wklej poniższe polecenie. AI sprawdzi, czy masz potrzebne narzędzia, pobierze sklep, zainstaluje zależności, uruchomi testy i pokaże Ci zielony start.</p>
       <div class="krok0-tresc reveal">
         <p id="krok0-tekst"></p>
         <button class="retro kopiuj" id="btn-krok0">Kopiuj polecenie Kroku 0</button>
       </div>
+      <p class="reveal">Chcesz najpierw tylko rzucić okiem, z czym będziesz pracować? <a class="link-neon" href="sklep/" target="_blank" rel="noopener">Zobacz sklep bez instalowania</a>. To wersja wzorcowa - nie pokaże zmian, które zrobisz u siebie, więc do ćwiczeń używaj kopii pobranej w Kroku 0.</p>
       <p class="reveal">Zapamiętaj też drugie zdanie - reset. Ilekroć coś zepsujesz i chcesz wrócić do stanu wyjściowego, mówisz do Claude Code: <em id="reset-tekst-inline"></em>. Każda karta poniżej ma własny przycisk, który to kopiuje za Ciebie.</p>
       <p class="reveal">Chcesz <strong>zobaczyć</strong> apkę w przeglądarce (przyda się przy testach ręcznych)? Powiedz Claude Code <em>"uruchom podgląd sklepu"</em> i otwórz <span class="nazwa-pliku">http://localhost:8080</span>. Nie otwieraj pliku dwuklikiem - adres <span class="nazwa-pliku">file://</span> pokaże pusty katalog, bo przeglądarka blokuje moduły JavaScript wczytywane prosto z dysku. A jeśli chcesz zobaczyć, jak sklep wygląda na telefonie - pokazuje to następna sekcja, bez potrzeby sięgania po prawdziwy telefon.</p>
     </section>
 
     <section id="podglad-telefonu">
       <h2 class="reveal">Podgląd telefonu - jak zobaczyć widok mobilny na komputerze</h2>
-      <p class="reveal">W sekcji "testy ręczne" oceniasz między innymi, czy apka dobrze wygląda na telefonie. Nie potrzebujesz do tego prawdziwego telefonu - każda przeglądarka (Chrome, Edge) ma wbudowany tryb telefonu. Nie musisz rozumieć niczego z tego, co się otworzy; wystarczy, że klikniesz po kolei poniższe kroki.</p>
+      <p class="reveal">W sekcji "testy ręczne" oceniasz między innymi, czy apka dobrze wygląda na telefonie. Nie potrzebujesz do tego prawdziwego telefonu - każda przeglądarka (Chrome, Edge) ma wbudowany tryb telefonu.</p>
       <div class="krok0-tresc reveal">
         <ol class="lista-krokow">
           <li>Otwórz podgląd sklepu w Chrome lub Edge - adres <span class="nazwa-pliku">http://localhost:8080</span> z Kroku 0.</li>
@@ -186,7 +188,7 @@
 
     function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-    const KROK0 = 'Przeczytaj README, przygotuj projekt: zainstaluj zależności, uruchom testy i pokaż, że wszystkie są zielone. Potem zainicjuj git i zapisz jako "zielony start".';
+    const KROK0 = 'Jestem w pustym folderze na ćwiczenia z testów. 1) Sprawdź, czy mam Node.js w wersji 18 lub nowszej oraz git. Jeśli czegoś brakuje, zatrzymaj się i powiedz mi, co zainstalować. 2) Pobierz z https://github.com/BartekSzyma/testy-vibecoding samą zawartość folderu sklep/ prosto do bieżącego folderu - bez reszty repozytorium i bez jego historii git. 3) Przeczytaj README.md i wykonaj z niego Krok 0: zainstaluj zależności, uruchom testy, pokaż, że wszystkie są zielone, zainicjuj git i zapisz stan jako "zielony start".';
     const RESET = 'przywróć apkę do zielonego startu';
 
     const SEKCJE = [
