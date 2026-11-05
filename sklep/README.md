@@ -22,6 +22,36 @@ Zawsze mów: **"uruchom testy"** (to uruchamia wszystkie: jednostkowe, behawiora
 snapshot, a11y). Nie uruchamiaj tylko wybranego podzbioru - inaczej nie zobaczysz czerwieni
 w sekcjach snapshot/a11y.
 
+## Gdzie są testy
+
+Wszystkie testy leżą w folderze `tests/`, po jednym pliku na rodzaj:
+
+| Plik | Rodzaj | Testy |
+|------|--------|-------|
+| `tests/smoke.spec.js` | smoke (przeglądarka) | S1 |
+| `tests/jednostkowe.test.js` | jednostkowe (bez przeglądarki) | U0-U5 i reguły pomocnicze |
+| `tests/behawioralne.test.js` | behawioralne BDD (bez przeglądarki) | B1, B2, B4 |
+| `tests/e2e.spec.js` | E2E (przeglądarka) | E1-E4 oraz B3 (przycisk zamówienia) |
+| `tests/snapshot.spec.js` | regresja wizualna (przeglądarka) | V1 |
+| `tests/dostepnosc.spec.js` | dostępność a11y (przeglądarka) | A1 |
+
+Pliki `*.test.js` uruchamia Vitest (liczy bez przeglądarki), pliki `*.spec.js` - Playwright
+(otwiera w tle prawdziwą przeglądarkę).
+
+## Jak zobaczyć, co nie działa
+
+- **Terminal** - po "uruchom testy" każdy test ma swój wiersz z identyfikatorem (np. `U1`, `E2`).
+  Przy czerwonym teście Vitest pisze, czego oczekiwał (`Expected`) i co dostał (`Received`).
+- **Raport HTML (testy Playwright)** - powiedz *"pokaż raport testów"*. Claude Code wykona
+  `npx playwright show-report` (najlepiej w tle) i otworzy w przeglądarce stronę z listą testów.
+  Przy czerwonym teście zobaczysz komunikat błędu i zrzut ekranu z chwili porażki, a przy
+  snapshocie - zrzut wzorcowy, aktualny i różnicę między nimi.
+- **Wyjaśnienie** - powiedz *"wyjaśnij mi prostymi słowami, dlaczego test U1 jest czerwony"*.
+
+Uwaga: "uruchom testy" najpierw puszcza Vitest. Jeśli tam coś jest czerwone, testy Playwright
+już nie ruszą (i raport HTML pokazuje wtedy poprzedni przebieg). Przy ćwiczeniach z testami
+jednostkowymi i behawioralnymi patrz więc na terminal.
+
 ## Jak zobaczyć apkę na żywo
 
 Testy uruchamiasz przez "uruchom testy". Ale żeby **zobaczyć** apkę w przeglądarce (potrzebne
@@ -39,12 +69,12 @@ przeglądarce - zobaczysz 4 produkty i działający koszyk. Gdy skończysz oglą
 
 ## Reset - przywróć do zielonego startu
 
-Po każdym ćwiczeniu "łamiącym" powiedz:
+Po każdym ćwiczeniu z promptem psującym powiedz:
 
 > przywróć apkę do zielonego startu
 
 Claude Code wykona `git reset --hard zielony-start && git clean -fd` (wróci do punktu startowego
-i usunie pliki utworzone przez prompt łamiący). `node_modules` i raporty są chronione przez
+i usunie pliki utworzone przez prompt psujący). `node_modules` i raporty są chronione przez
 `.gitignore`.
 
 ## Zapisywanie własnego testu

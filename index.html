@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dzień 12: testy w vibecodingu - workbook z 7 typami testów, bankiem promptów łamiących i kreatorem własnych testów.">
+  <meta name="description" content="Dzień 12: testy w vibecodingu - workbook z 7 typami testów, bankiem promptów psujących i kreatorem własnych testów.">
   <title>Dzień 12: Testy - Twoja siatka bezpieczeństwa</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%230d0b1a'/><path d='M4 8 L7 11 L12 4' fill='none' stroke='%2339ff8b' stroke-width='2'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,6 +75,15 @@
     .karta-testu summary:focus-visible{outline:2px solid var(--neon-zolty);}
     .karta-testu details p{margin:8px 0 2px;}
     .karta-testu .kopiuj{margin:8px 8px 8px 0;}
+    .meta-testu{font-family:var(--display); font-size:13px !important; color:var(--tekst-cien); letter-spacing:.5px;}
+    .id-testu{color:var(--neon-zolty);}
+    .plik{font-family:var(--display); color:var(--neon-magenta); font-size:.92em; overflow-wrap:anywhere;}
+    .gdzie-testy{font-size:15px; color:var(--tekst-cien); margin:0 0 6px;}
+    ol.kroki-karty{list-style:none; counter-reset:krok; margin:14px 0 6px; padding:0;}
+    ol.kroki-karty > li{counter-increment:krok; position:relative; padding:4px 0 10px 40px; border-left:2px solid var(--ramka); margin-left:13px;}
+    ol.kroki-karty > li:last-child{border-left-color:transparent;}
+    ol.kroki-karty > li::before{content:counter(krok); position:absolute; left:-14px; top:2px; width:26px; height:26px; border-radius:50%; background:var(--tlo); border:2px solid var(--neon-cyan); color:var(--neon-cyan); font-family:var(--display); font-size:13px; display:flex; align-items:center; justify-content:center;}
+    ol.kroki-karty h4{margin:2px 0 4px; font-size:14px; text-transform:uppercase;}
     .postep{display:flex; align-items:center; gap:8px; margin-top:12px; font-size:14px; color:var(--tekst-cien); cursor:pointer; width:fit-content;}
     .postep input[type=checkbox]{width:18px; height:18px; accent-color:var(--neon-zielony); cursor:pointer;}
 
@@ -144,6 +153,7 @@
         <button class="retro kopiuj" id="btn-krok0">Kopiuj polecenie Kroku 0</button>
       </div>
       <p class="reveal">Chcesz najpierw tylko rzucić okiem, z czym będziesz pracować? <a class="link-neon" href="sklep/" target="_blank" rel="noopener">Zobacz sklep bez instalowania</a>. To wersja wzorcowa - nie pokaże zmian, które zrobisz u siebie, więc do ćwiczeń używaj kopii pobranej w Kroku 0.</p>
+      <p class="reveal"><strong>Gdzie są testy?</strong> W pobranym sklepie, w folderze <span class="nazwa-pliku">tests/</span> - po jednym pliku na rodzaj testu (smoke, jednostkowe, behawioralne, e2e, snapshot, dostępność). Każdy test ma w nazwie identyfikator, np. U1 albo E2 - ten sam zobaczysz w wyniku testów. Każda karta poniżej mówi, który test powinien zrobić się czerwony, w którym pliku leży i gdzie zobaczysz wynik. Możesz też poprosić Claude Code: <em>"pokaż mi test U1 i wyjaśnij, co sprawdza"</em>.</p>
       <p class="reveal">Zapamiętaj też drugie zdanie - reset. Ilekroć coś zepsujesz i chcesz wrócić do stanu wyjściowego, mówisz do Claude Code: <em id="reset-tekst-inline"></em>. Każda karta poniżej ma własny przycisk, który to kopiuje za Ciebie.</p>
       <p class="reveal">Chcesz <strong>zobaczyć</strong> apkę w przeglądarce (przyda się przy testach ręcznych)? Powiedz Claude Code <em>"uruchom podgląd sklepu"</em> i otwórz <span class="nazwa-pliku">http://localhost:8080</span>. Nie otwieraj pliku dwuklikiem - adres <span class="nazwa-pliku">file://</span> pokaże pusty katalog, bo przeglądarka blokuje moduły JavaScript wczytywane prosto z dysku. A jeśli chcesz zobaczyć, jak sklep wygląda na telefonie - pokazuje to następna sekcja, bez potrzeby sięgania po prawdziwy telefon.</p>
     </section>
@@ -175,7 +185,7 @@
       <p class="reveal">Co dalej: przejdź cały bank promptów po kolei, zaznaczaj postęp checkboxem przy każdej karcie i układaj własne testy w kreatorach na końcu każdej sekcji. Gdy skończysz, Twoja apka ma pełny komplet 7 typów testów - i Ty wiesz, co każdy z nich pilnuje.</p>
       <ul class="checklist-koncowa reveal">
         <li>Przeszedłeś Krok 0 i widziałeś zielony start.</li>
-        <li>Złamałeś przynajmniej jeden test w każdej z 7 sekcji i przeczytałeś komunikat czerwonego wyniku.</li>
+        <li>Zepsułeś apkę promptem psującym w każdej z 7 sekcji i przeczytałeś komunikat czerwonego wyniku.</li>
         <li>Każdorazowo wracałeś do zielonego startu przed kolejnym ćwiczeniem.</li>
         <li>Ułożyłeś własny test słowami w co najmniej jednym kreatorze.</li>
       </ul>
@@ -194,144 +204,158 @@
     const SEKCJE = [
       {
         id: 'smoke', tytul: 'Smoke test',
+        pliki: 'tests/smoke.spec.js',
+        gdzie: 'S1 to test Playwright - otwiera w tle prawdziwą przeglądarkę. W terminalu zobaczysz czerwony wiersz S1 z komunikatem błędu. Powiedz „pokaż raport testów”, a zobaczysz też zrzut ekranu z chwili porażki. Sam sklep („uruchom podgląd sklepu”) pokaże pusty katalog.',
         coToPoco: 'Najprostszy z możliwych testów: sprawdza tylko, czy apka w ogóle wstaje - czy strona się ładuje, rysuje swoje elementy i nie wyrzuca błędu, który by ją zabił. Nie ocenia żadnych liczb ani reguł biznesowych; jest jak sprawdzenie "czy urządzenie w ogóle się włącza". Dlatego to zawsze pierwszy test, który uruchamiasz - gdy smoke jest czerwony, nie ma sensu patrzeć na resztę, bo coś jest zepsute u samych fundamentów.',
         kreator: 'Dopisz test smoke: po otwarciu strony element ___ jest widoczny.',
         karty: [
-          { nazwa: 'Strona ładuje się i widać 4 produkty',
+          { nazwa: 'Strona ładuje się i widać 4 produkty', test: 'S1', plik: 'tests/smoke.spec.js',
             coSprawdza: 'Po wejściu na stronę w kontenerze katalogu pojawiają się 4 karty produktów (Kubek, Koszulka, Plakat, Naklejka), a konsola przeglądarki nie zgłasza żadnego błędu JavaScript. To absolutne minimum, które musi działać, zanim jakikolwiek inny test ma sens.',
-            promptLamiacy: 'Zmień w index.html ścieżkę skryptu z src/ui.js na src/ui-new.js.',
+            promptPsujacy: 'Zmień w index.html ścieżkę skryptu z src/ui.js na src/ui-new.js.',
             oczekiwanie: 'Przeglądarka szuka pliku, którego nie ma, więc katalog w ogóle się nie renderuje - zamiast 4 kart widać pusty obszar, a test smoke robi się czerwony (znalazł 0 kart zamiast 4).',
             pewniak: 'Usuń z index.html kontener katalogu <div id="katalog">. Bez niego skrypt nie ma gdzie wstawić produktów, więc katalog znika na pewno - nawet jeśli AI ostrożnie potraktował poprzedni prompt.' },
         ],
       },
       {
         id: 'jednostkowe', tytul: 'Testy jednostkowe',
+        pliki: 'tests/jednostkowe.test.js',
+        gdzie: 'Testy U1-U5 uruchamia Vitest, bez przeglądarki. Wynik czytasz w terminalu: przy czerwonym teście Vitest pisze, czego oczekiwał (Expected) i co dostał (Received), np. 75 kontra 67,5. Na ekranie sklepu tych pośrednich liczb nie ma - co najwyżej zmieni się kwota „Do zapłaty”.',
         coToPoco: 'Testy jednostkowe biorą jedną funkcję liczącą (suma pozycji, VAT, rabat) i sprawdzają ją w izolacji: podają jej konkretne wejście i porównują wynik z oczekiwaną liczbą. Nie klikają w nic i nie ładują całej strony, dlatego są najtańsze i najszybsze - w piramidzie jest ich najwięcej. To Twoja siatka na błędy w rachunkach: literówkę w stawce VAT albo pomylone "plus" z "razy" łapią w ułamku sekundy. Uwaga: te liczby (suma netto, VAT, rabat) żyją wewnątrz funkcji - w sklepie ich nie zobaczysz, więc wynik czytasz z raportu "uruchom testy", nie z ekranu.',
         kreator: 'Dopisz test jednostkowy: dla wejścia ___ wynik funkcji ___ powinien być ___.',
         karty: [
-          { nazwa: '3 × Kubek = 75 zł netto',
+          { nazwa: '3 × Kubek = 75 zł netto', test: 'U1', plik: 'tests/jednostkowe.test.js',
             coSprawdza: 'Funkcja sumaNetto mnoży cenę produktu przez ilość i sumuje pozycje: 3 kubki po 25 zł mają dać dokładnie 75 zł netto. Sprawdzamy sam rachunek pozycji, jeszcze bez rabatu, VAT-u i kosztu dostawy. Tej sumy netto sklep nie wyświetla - test odczytuje ją wprost z funkcji, więc jej wynik zobaczysz w raporcie "uruchom testy", a nie na ekranie sklepu.',
-            promptLamiacy: 'Dodaj rabat ilościowy: przy 3+ szt. tego samego produktu licz pozycję 10% taniej.',
+            promptPsujacy: 'Dodaj rabat ilościowy: przy 3+ szt. tego samego produktu licz pozycję 10% taniej.',
             oczekiwanie: 'Rabat ilościowy zbija cenę o 10%, więc funkcja zwraca 67,50 zamiast 75 - test jednostkowy U1 (3 × Kubek = 75) robi się czerwony, bo oczekiwał równo 75.',
             pewniak: 'W funkcji sumy pozycji dodawaj cenę i ilość zamiast mnożyć.' },
-          { nazwa: 'VAT 23% z 75 = 17,25 (brutto 92,25)',
+          { nazwa: 'VAT 23% z 75 = 17,25 (brutto 92,25)', test: 'U2', plik: 'tests/jednostkowe.test.js',
             coSprawdza: 'Funkcja vat liczy 23% od kwoty netto (po ewentualnym rabacie): od 75 zł powinno wyjść 17,25 zł VAT, czyli 92,25 zł brutto. Test pilnuje, żeby stawka i zaokrąglenie do groszy się nie rozjechały.',
-            promptLamiacy: 'Zaokrąglaj kwotę VAT w dół do pełnych złotych, żeby ceny ładniej wyglądały.',
+            promptPsujacy: 'Zaokrąglaj kwotę VAT w dół do pełnych złotych, żeby ceny ładniej wyglądały.',
             oczekiwanie: 'Po zaokrągleniu VAT w dół do pełnych złotych zamiast 17,25 wychodzi 17,00 - test U2 czerwony, bo oczekiwał dokładnie 17,25.',
             pewniak: 'Ustaw stawkę VAT na 0.' },
-          { nazwa: 'VIBE10 daje -10% od netto: ze 100 -> 10',
+          { nazwa: 'VIBE10 daje -10% od netto: ze 100 -> 10', test: 'U3', plik: 'tests/jednostkowe.test.js',
             coSprawdza: 'Funkcja rabat z kodem VIBE10 odejmuje 10% od sumy netto towarów: dla koszyka za 100 zł rabat ma wynieść dokładnie 10 zł. Sprawdzamy tu wysokość rabatu, a nie to, czy sam kod jest w ogóle rozpoznawany.',
-            promptLamiacy: 'Zmień rabat VIBE10 z 10% na 15%.',
+            promptPsujacy: 'Zmień rabat VIBE10 z 10% na 15%.',
             oczekiwanie: 'Rabat podniesiony do 15% daje 15 zł zamiast 10 - test U3 czerwony, bo oczekiwał rabatu równego 10.',
             pewniak: 'Ustaw rabat VIBE10 na 50%.' },
-          { nazwa: 'Pusty koszyk: suma() = liczba 0',
+          { nazwa: 'Pusty koszyk: suma() = liczba 0', test: 'U4', plik: 'tests/jednostkowe.test.js',
             coSprawdza: 'Dla pustego koszyka suma netto ma być liczbą 0 - i to naprawdę typu "liczba", a nie null czy pusty tekst. To pilnuje, żeby kolejne rachunki (VAT, dostawa) nie dostały czegoś, na czym się wywrócą.',
-            promptLamiacy: 'Gdy koszyk jest pusty, niech funkcja sumy zwraca null zamiast 0.',
+            promptPsujacy: 'Gdy koszyk jest pusty, niech funkcja sumy zwraca null zamiast 0.',
             oczekiwanie: 'Funkcja zwraca null zamiast 0, więc sprawdzenie "czy to liczba" oraz "czy równe 0" nie przechodzi - test U4 robi się czerwony.',
             pewniak: 'Niech suma() dla pustego koszyka rzuca wyjątek.' },
-          { nazwa: '3 × Naklejka = 30 netto, VAT 6,90',
+          { nazwa: '3 × Naklejka = 30 netto, VAT 6,90', test: 'U5', plik: 'tests/jednostkowe.test.js',
             coSprawdza: 'Trzy naklejki po 10 zł to 30 zł netto, a 23% VAT od tego to 6,90 zł. Ten sam mechanizm co przy kubkach, tylko na innych liczbach - żeby błąd w stawce dało się złapać na więcej niż jednym przykładzie.',
-            promptLamiacy: 'Licz VAT jako 20% zamiast 23%, bo to prostsze.',
+            promptPsujacy: 'Licz VAT jako 20% zamiast 23%, bo to prostsze.',
             oczekiwanie: 'Przy stawce 20% zamiast 23% wychodzi 6,00 zł zamiast 6,90 - test U5 czerwony, bo oczekiwał 6,90.',
             pewniak: 'Ustaw stawkę VAT na 10%.' },
         ],
       },
       {
         id: 'behawioralne', tytul: 'Testy behawioralne (BDD)',
+        pliki: 'tests/behawioralne.test.js (B1, B2, B4) i tests/e2e.spec.js (B3)',
+        gdzie: 'B1, B2 i B4 uruchamia Vitest, bez przeglądarki - wynik w terminalu, z linijkami Expected (oczekiwane) i Received (otrzymane). B3 sprawdza przycisk w prawdziwej przeglądarce, więc leży w pliku e2e.spec.js; przy nim „pokaż raport testów” pokaże też zrzut ekranu. Część zmian zobaczysz w sklepie („uruchom podgląd sklepu”), np. koszt dostawy albo aktywny przycisk.',
         coToPoco: 'Testy behawioralne (BDD) opisują całą regułę biznesową w ludzkim schemacie "mając... gdy... wtedy...": mając taki koszyk, gdy zrobię to, wtedy ma się stać tamto. Są najbliżej tego, czego uczysz się na tym warsztacie - opisywania testu zwykłymi słowami. Sprawdzają nie pojedynczą funkcję, lecz sensowność zachowania: darmową dostawę od progu, kod rabatowy tylko dla niepustego koszyka, zablokowany przycisk przy pustym koszyku.',
         kreator: 'Dopisz test behawioralny: mając ___, gdy ___, wtedy ___.',
         karty: [
-          { nazwa: 'Koszyk 200 zł netto (5×Plakat) -> darmowa dostawa',
+          { nazwa: 'Koszyk 200 zł netto (5×Plakat) -> darmowa dostawa', test: 'B1', plik: 'tests/behawioralne.test.js',
             coSprawdza: 'Reguła: od 200 zł netto dostawa jest darmowa. Pięć plakatów po 40 zł to równo 200 zł, więc koszt dostawy ma spaść z 15 zł do 0. Test pilnuje samego progu - czy "200 i więcej" faktycznie obejmuje też równe 200.',
-            promptLamiacy: 'Zmień zasadę: darmowa dostawa dopiero powyżej 200 zł, nie od 200.',
+            promptPsujacy: 'Zmień zasadę: darmowa dostawa dopiero powyżej 200 zł, nie od 200.',
             oczekiwanie: 'Po zmianie na "dopiero powyżej 200" kwota równa 200 zł nie łapie już darmowej dostawy - dochodzi 15 zł, test B1 czerwony. To klasyczny błąd "o jeden": "większe" zamiast "większe lub równe".',
             pewniak: 'Podnieś próg darmowej dostawy do 500 zł.' },
-          { nazwa: 'Pusty koszyk + VIBE10 -> rabat NIE aktywny',
+          { nazwa: 'Pusty koszyk + VIBE10 -> rabat NIE aktywny', test: 'B2', plik: 'tests/behawioralne.test.js',
             coSprawdza: 'Kod VIBE10 ma działać tylko dla niepustego koszyka. Dla pustego koszyka znacznik rabatAktywny ma być false - żeby apka nie chwaliła się rabatem naliczonym od zera złotych.',
-            promptLamiacy: 'Aktywuj kod VIBE10 także dla pustego koszyka i pokazuj komunikat "Rabat naliczony".',
+            promptPsujacy: 'Aktywuj kod VIBE10 także dla pustego koszyka i pokazuj komunikat "Rabat naliczony".',
             oczekiwanie: 'Rabat aktywuje się nawet przy pustym koszyku, więc rabatAktywny robi się true - test B2 czerwony, bo oczekiwał false.',
             pewniak: 'Usuń warunek niepustego koszyka - VIBE10 zawsze ustawia flagę rabatu na true.' },
-          { nazwa: 'Pusty koszyk -> przycisk zamówienia nieaktywny',
+          { nazwa: 'Pusty koszyk -> przycisk zamówienia nieaktywny', test: 'B3', plik: 'tests/e2e.spec.js',
             coSprawdza: 'Gdy koszyk jest pusty, przycisk "Złóż zamówienie" (#zloz-zamowienie) ma być nieaktywny (atrybut disabled) - nie da się zamówić pustego koszyka. Test sprawdza obecność tego atrybutu przy zerowej liczbie produktów.',
-            promptLamiacy: 'Niech przycisk "Złóż zamówienie" będzie zawsze aktywny.',
+            promptPsujacy: 'Niech przycisk "Złóż zamówienie" będzie zawsze aktywny.',
             oczekiwanie: 'Przycisk jest zawsze aktywny, więc przy pustym koszyku brakuje atrybutu disabled - test B3 czerwony.',
             pewniak: 'Usuń całą logikę wyłączania przycisku zamówienia.' },
-          { nazwa: 'Rabat od towaru (100), nie od towaru+dostawa',
+          { nazwa: 'Rabat od towaru (100), nie od towaru+dostawa', test: 'B4', plik: 'tests/behawioralne.test.js',
             coSprawdza: 'Rabat VIBE10 liczy się od wartości samych towarów (100 zł -> 10 zł), a nie od towarów razem z dostawą. Test pilnuje podstawy naliczania rabatu, żeby klient nie dostawał rabatu również od kosztu przesyłki.',
-            promptLamiacy: 'Licz rabat od całej kwoty razem z dostawą.',
+            promptPsujacy: 'Licz rabat od całej kwoty razem z dostawą.',
             oczekiwanie: 'Rabat liczony od 115 zł (100 zł towaru + 15 zł dostawy) daje 11,50 zamiast 10 - test B4 czerwony.',
             pewniak: 'Do podstawy rabatu VIBE10 dolicz koszt dostawy.' },
         ],
       },
       {
         id: 'e2e', tytul: 'Testy E2E (Playwright)',
+        pliki: 'tests/e2e.spec.js',
+        gdzie: 'Testy E2E (Playwright) klikają po sklepie w prawdziwej przeglądarce. W terminalu zobaczysz czerwony wiersz testu i krok, na którym się wywrócił. Powiedz „pokaż raport testów” - przy czerwonym teście jest komunikat błędu i zrzut ekranu z chwili porażki. Ten sam błąd możesz odtworzyć ręcznie w sklepie („uruchom podgląd sklepu”).',
         coToPoco: 'Testy E2E (end-to-end, w narzędziu Playwright) przechodzą apkę tak jak żywy użytkownik: otwierają stronę, klikają przyciski, wpisują dane do formularza i sprawdzają, co pojawia się na ekranie. Dają największą pewność, bo obejmują całą drogę zakupu naraz - ale są najdroższe i najwolniejsze, dlatego w piramidzie jest ich najmniej. Uruchamiają w tle prawdziwą przeglądarkę, więc łapią też błędy w sklejeniu logiki z interfejsem.',
         kreator: 'Dopisz test e2e: gdy kliknę ___ i wpiszę ___, wtedy na ekranie pojawi się ___.',
         karty: [
-          { nazwa: 'Dodaj 2 produkty -> dane -> zamówienie -> potwierdzenie',
+          { nazwa: 'Dodaj 2 produkty -> dane -> zamówienie -> potwierdzenie', test: 'E1', plik: 'tests/e2e.spec.js',
             coSprawdza: 'Pełna ścieżka zakupu: dodaj 2 produkty, wpisz dane, złóż zamówienie - a na końcu ma pojawić się ekran potwierdzenia (#potwierdzenie) z numerem zaczynającym się od "ZAM-". To sprawdza, że cały przepływ dowozi klienta aż do samego końca.',
-            promptLamiacy: 'Po kliknięciu "Złóż zamówienie" nie pokazuj ekranu potwierdzenia, tylko wyczyść koszyk.',
+            promptPsujacy: 'Po kliknięciu "Złóż zamówienie" nie pokazuj ekranu potwierdzenia, tylko wyczyść koszyk.',
             oczekiwanie: 'Po kliknięciu "Złóż zamówienie" koszyk się czyści, ale ekran potwierdzenia się nie pokazuje - test E1 czerwony, bo nie znajduje #potwierdzenie z numerem ZAM-.',
             pewniak: 'Ustaw ekran #potwierdzenie na stałe ukryty (display:none).' },
-          { nazwa: 'E-mail bez @ blokuje zamówienie',
+          { nazwa: 'E-mail bez @ blokuje zamówienie', test: 'E2', plik: 'tests/e2e.spec.js',
             coSprawdza: 'Formularz ma blokować e-mail bez znaku @: przy błędnym adresie zamówienie nie przechodzi, a użytkownik dostaje komunikat błędu zamiast potwierdzenia. Test sprawdza, że walidacja naprawdę zatrzymuje zamówienie.',
-            promptLamiacy: 'Usuń walidację e-maila, przyjmuj dowolny tekst.',
+            promptPsujacy: 'Usuń walidację e-maila, przyjmuj dowolny tekst.',
             oczekiwanie: 'Bez walidacji byle tekst przechodzi jako e-mail, więc pojawia się potwierdzenie mimo błędnego adresu - test E2 czerwony.',
             pewniak: 'Zawsze pomijaj walidację formularza.' },
-          { nazwa: 'Dodanie produktu zwiększa licznik',
+          { nazwa: 'Dodanie produktu zwiększa licznik', test: 'E3', plik: 'tests/e2e.spec.js',
             coSprawdza: 'Dodanie produktu do koszyka ma podbić licznik przy ikonie koszyka (#licznik-koszyka) z 0 na 1. Prosty sprawdzian, że akcja "dodaj" faktycznie dokłada rzecz do koszyka i że interfejs od razu to pokazuje.',
-            promptLamiacy: 'Po dodaniu produktu odświeżaj całą stronę.',
+            promptPsujacy: 'Po dodaniu produktu odświeżaj całą stronę.',
             oczekiwanie: 'Odświeżenie całej strony po dodaniu produktu zeruje koszyk, więc licznik wraca do 0 zamiast pokazać 1 - test E3 czerwony.',
             pewniak: 'Po dodaniu produktu ustaw licznik koszyka na 0.' },
-          { nazwa: 'Potwierdzenie pokazuje kwotę z rabatem',
+          { nazwa: 'Potwierdzenie pokazuje kwotę z rabatem', test: 'E4', plik: 'tests/e2e.spec.js',
             coSprawdza: 'Na ekranie potwierdzenia kwota do zapłaty (#kwota-potwierdzenie) ma być tą policzoną z rabatem i VAT-em - w tym scenariuszu 221,40 zł. Test pilnuje, że klient widzi kwotę faktycznie naliczoną, a nie surowe netto.',
-            promptLamiacy: 'Na potwierdzeniu pokazuj zawsze sumę netto, bez rabatu i VAT.',
+            promptPsujacy: 'Na potwierdzeniu pokazuj zawsze sumę netto, bez rabatu i VAT.',
             oczekiwanie: 'Potwierdzenie pokazuje samą sumę netto (bez rabatu i VAT), więc kwota jest inna niż 221,40 zł - test E4 czerwony.',
             pewniak: 'Na potwierdzeniu pokaż zawsze 0 zł.' },
         ],
       },
       {
         id: 'snapshot', tytul: 'Regresja wizualna (snapshot)',
+        pliki: 'tests/snapshot.spec.js (wzorzec: tests/snapshot.spec.js-snapshots/)',
+        gdzie: 'W terminalu V1 zgłosi, że obrazy się różnią (ile pikseli). Najwięcej zobaczysz po „pokaż raport testów”: przy V1 są trzy obrazy - wzorcowy (Expected), aktualny (Actual) i różnica (Diff) z zaznaczonymi zmienionymi pikselami.',
         coToPoco: 'Regresja wizualna (snapshot) robi zdjęcie fragmentu ekranu i porównuje je piksel po pikselu z zatwierdzonym wcześniej wzorcem (baseline). Wychwytuje to, czego testy liczbowe nie widzą: że coś rozjechało się wizualnie - przesunęło, zmieniło kolor, urosło. Wynik jest zielony, dopóki wygląd zgadza się ze wzorcem; każda widoczna zmiana świeci na czerwono, także ta, której wcale nie planowałeś.',
         kreator: 'Dopisz test snapshot: wygląd elementu ___ ma zgadzać się z zatwierdzonym zrzutem.',
         karty: [
-          { nazwa: 'Panel podsumowania zgodny ze zrzutem',
+          { nazwa: 'Panel podsumowania zgodny ze zrzutem', test: 'V1', plik: 'tests/snapshot.spec.js',
             coSprawdza: 'Wygląd panelu podsumowania (#podsumowanie) ma zgadzać się co do piksela z zatwierdzonym zrzutem wzorcowym. Test nie rozumie, co znaczą liczby w panelu - porównuje sam obraz z wzorcem.',
-            promptLamiacy: 'Powiększ mocno sumę i zrób ją czerwoną, żeby rzucała się w oczy.',
+            promptPsujacy: 'Powiększ mocno sumę i zrób ją czerwoną, żeby rzucała się w oczy.',
             oczekiwanie: 'Powiększona, czerwona suma zmienia obraz panelu, więc porównanie z wzorcem wykrywa różnicę pikseli - test V1 czerwony, mimo że sama matematyka jest nadal poprawna.',
             pewniak: 'Ukryj cały panel podsumowania (display:none).' },
         ],
       },
       {
         id: 'a11y', tytul: 'Dostępność (a11y)',
+        pliki: 'tests/dostepnosc.spec.js',
+        gdzie: 'A1 uruchamia silnik axe w prawdziwej przeglądarce. W terminalu i w raporcie („pokaż raport testów”) zobaczysz listę naruszeń z nazwą reguły (button-name) i wskazaniem przycisków, których dotyczą. Na ekranie sklepu przyciski mogą wyglądać dobrze - problem „widzi” dopiero czytnik ekranu.',
         coToPoco: 'Testy dostępności (a11y) sprawdzają, czy z apki da się korzystać także bez myszki i bez dobrego wzroku: czy przyciski mają czytelną nazwę dla czytnika ekranu, czy kontrast jest wystarczający, czy wszystko da się obsłużyć z klawiatury. Uruchamia je silnik axe - ten sam, którego używają zawodowe audyty dostępności. To nie fanaberia: dla części użytkowników taki tryb to jedyny sposób, żeby w ogóle zrobić zakupy.',
         kreator: 'Dopisz test dostępności: element ___ ma mieć dostępną nazwę / wystarczający kontrast.',
         karty: [
-          { nazwa: 'Przyciski "Dodaj" mają dostępną nazwę',
+          { nazwa: 'Przyciski "Dodaj" mają dostępną nazwę', test: 'A1', plik: 'tests/dostepnosc.spec.js',
             coSprawdza: 'Każdy przycisk "Dodaj do koszyka" w katalogu (#katalog) ma mieć dostępną nazwę - tekst albo aria-label - którą odczyta czytnik ekranu. Silnik axe zgłasza regułę button-name, gdy trafi na przycisk-zagadkę bez żadnej nazwy.',
-            promptLamiacy: 'Zamień przyciski "Dodaj do koszyka" na same ikony koszyka, bez tekstu - żeby było nowocześnie.',
+            promptPsujacy: 'Zamień przyciski "Dodaj do koszyka" na same ikony koszyka, bez tekstu - żeby było nowocześnie.',
             oczekiwanie: 'Z przycisków został sam obrazek bez tekstu i bez aria-label, więc axe zgłasza naruszenie reguły button-name (przycisk bez dostępnej nazwy) - test A1 czerwony.',
             pewniak: 'Usuń z przycisków "Dodaj" tekst i aria-label, a w środku wstaw ikonę <svg> bez tekstu i bez aria-label. (Samo emoji NIE wystarcza - axe liczy je jak tekst.)' },
         ],
       },
       {
         id: 'reczne', tytul: 'Testy ręczne (twist)',
+        pliki: 'brak - tu testem jesteś Ty',
+        gdzie: 'Automaty niczego tu nie złapią: po „uruchom testy” wszystko zostaje zielone i to jest właśnie lekcja tej sekcji. Zobaczysz problem tylko na żywo: powiedz „uruchom podgląd sklepu”, otwórz http://localhost:8080 i oceń zmianę okiem (przy telefonie - w trybie podglądu telefonu).',
         coToPoco: 'Testy ręczne to sekcja o twiście całego dnia: zielone testy to nie to samo co dobry produkt. Automat sprawdza tylko to, o co go wprost poprosiłeś - nie oceni, czy komunikat jest zrozumiały, czy kolejność pól jest naturalna, czy na telefonie nic nie wyłazi poza ekran. Tu jedynym testem jesteś Ty: patrzysz na apkę okiem użytkownika i wystawiasz PASS albo FAIL. Każdy z trzech przykładów niżej zostawia wszystkie automaty na zielono, a mimo to produkt jest gorszy.',
         kreator: 'Dopisz pozycję checklisty ręcznej: sprawdź, czy ___ (PASS = spełnia, FAIL = nie).',
         karty: [
           { nazwa: 'Komunikat o dostawie zrozumiały (kwota + waluta)',
             coSprawdza: 'OCENA CZŁOWIEKA: komunikat o darmowej dostawie ma być zrozumiały - z kwotą i walutą, np. "Do darmowej dostawy brakuje 12,00 zł". Żaden automat nie oceni, czy zdanie jest jasne dla klienta.',
-            promptLamiacy: 'Skróć komunikat o darmowej dostawie do "Brakuje: 12".',
+            promptPsujacy: 'Skróć komunikat o darmowej dostawie do "Brakuje: 12".',
             oczekiwanie: 'Skrócony komunikat "Brakuje: 12" nadal przechodzi wszystkie automaty (liczba się zgadza), ale człowiek daje FAIL: brak waluty i kontekstu, klient nie wie, o co chodzi.',
             pewniak: 'Brak - to test ręczny, żaden automat go nie łapie. O to właśnie w tej sekcji chodzi.' },
           { nazwa: 'Kolejność pól formularza naturalna',
             coSprawdza: 'OCENA CZŁOWIEKA: pola formularza mają iść w naturalnej kolejności - imię, potem e-mail, potem adres. Kod zadziała przy dowolnej kolejności, ale nienaturalna kolejność męczy i myli użytkownika.',
-            promptLamiacy: 'Przenieś pole adres przed imię.',
+            promptPsujacy: 'Przenieś pole adres przed imię.',
             oczekiwanie: 'Po przeniesieniu adresu przed imię apka działa i wszystkie testy są zielone, ale wypełnianie formularza staje się nienaturalne - człowiek daje FAIL za UX.',
             pewniak: 'Brak - to ocena ludzka; automat nie ma pojęcia o "naturalnej" kolejności pól.' },
           { nazwa: 'Na telefonie (375px) nic nie wychodzi poza ekran',
             coSprawdza: 'OCENA CZŁOWIEKA: na wąskim ekranie telefonu (ok. 375 px szerokości) nic nie ma wychodzić poza ekran ani wymuszać przewijania w bok. Snapshot robiony na szerokim ekranie tego nie zobaczy - trzeba spojrzeć na widok mobilny (jak go włączyć, opisuje sekcja "Podgląd telefonu" wyżej).',
-            promptLamiacy: 'Dodaj styl tylko dla telefonów: w media query max-width 480px ustaw #podsumowanie na stałą szerokość 600px.',
+            promptPsujacy: 'Dodaj styl tylko dla telefonów: w media query max-width 480px ustaw #podsumowanie na stałą szerokość 600px.',
             oczekiwanie: 'Automaty są ZIELONE (snapshot na desktopie 1000 px pozostaje nietknięty), ale na telefonie panel o sztywnej szerokości 600 px wychodzi poza ekran 375 px - łapie to tylko człowiek oglądający widok mobilny.',
             pewniak: 'Brak - ocena ludzka. (Zweryfikowane: bez media query prosta stała szerokość psuje też snapshot V1, więc zmiana MUSI być tylko dla telefonów.)' },
         ],
@@ -381,6 +405,61 @@
     }
 
     /* ---------- Render sekcji i kart ---------- */
+    const URUCHOM = 'uruchom testy';
+
+    function przyciskKopiuj(tekst, etykieta, kolor) {
+      return `<button class="retro ${kolor} kopiuj" data-tekst="${encodeURIComponent(tekst)}">${escapeHtml(etykieta)}</button>`;
+    }
+
+    // Jeden szablon przebiegu dla wszystkich kart: zepsuj -> uruchom testy -> zobacz -> przywróć.
+    // Karta wnosi tylko swoje dane (test, plik, prompt, oczekiwanie); sekcja - opis "gdzie widać".
+    function renderKarta(s, k, klucz) {
+      const t = k.test ? escapeHtml(k.test) : '';
+      const wyjasnij = k.test
+        ? 'Wyjaśnij mi prostymi słowami, dlaczego test ' + k.test + ' jest czerwony: czego oczekiwał, co dostał i która zmiana w kodzie to spowodowała.'
+        : '';
+      const testPlaywright = Boolean(k.plik && k.plik.endsWith('.spec.js'));
+
+      const krok2 = (k.test
+        ? `<p>Powiedz w Claude Code: <em>„${URUCHOM}”</em>.</p>`
+        : `<p>Powiedz w Claude Code: <em>„${URUCHOM}”</em>. Wszystkie testy powinny zostać <strong>zielone</strong> - to nie błąd, tylko lekcja tej sekcji.</p>`)
+        + przyciskKopiuj(URUCHOM, 'Kopiuj: uruchom testy', 'cyan');
+
+      const krok3 = k.test
+        ? `<p>Czerwony powinien być test <strong class="id-testu">${t}</strong> (plik <span class="plik">${escapeHtml(k.plik)}</span>). Jeśli czerwone są też inne testy, to skutki uboczne tej samej zmiany - skup się na ${t}.</p>
+           <p><em>Gdzie to zobaczysz:</em> ${escapeHtml(s.gdzie)}</p>
+           <p><em>Dlaczego:</em> ${escapeHtml(k.oczekiwanie)}</p>
+           ${testPlaywright ? przyciskKopiuj('pokaż raport testów', 'Kopiuj: pokaż raport testów', 'cyan') : ''}
+           ${przyciskKopiuj(wyjasnij, 'Kopiuj: wyjaśnij, dlaczego ' + k.test + ' jest czerwony', 'cyan')}`
+        : `<p><em>Gdzie to zobaczysz:</em> ${escapeHtml(s.gdzie)}</p>
+           <p><em>Co ocenić:</em> ${escapeHtml(k.oczekiwanie)}</p>
+           ${przyciskKopiuj('uruchom podgląd sklepu', 'Kopiuj: uruchom podgląd sklepu', 'cyan')}`;
+
+      const krok4 = k.test
+        ? '<p>Wróć do stanu wyjściowego i uruchom testy jeszcze raz - wszystko ma być zielone. Dopiero wtedy przejdź do następnej karty.</p>'
+        : '<p>Zatrzymaj podgląd, wróć do stanu wyjściowego i przejdź do następnej karty.</p>';
+
+      const meta = k.test
+        ? `<p class="meta-testu">Test <strong class="id-testu">${t}</strong> · plik <span class="plik">${escapeHtml(k.plik)}</span></p>`
+        : '<p class="meta-testu">Test ręczny - oceniasz Ty</p>';
+
+      return `
+        <h3>${escapeHtml(k.nazwa)}</h3>
+        ${meta}
+        <p><em>Co sprawdza:</em> ${escapeHtml(k.coSprawdza)}</p>
+        <ol class="kroki-karty">
+          <li><h4>Zepsuj</h4>
+            <p>Skopiuj prompt psujący i wklej go w Claude Code, w folderze sklepu. AI zmieni kod apki.</p>
+            ${przyciskKopiuj(k.promptPsujacy, 'Kopiuj prompt psujący', 'magenta')}</li>
+          <li><h4>Uruchom testy</h4>${krok2}</li>
+          <li><h4>Zobacz, co nie działa</h4>${krok3}</li>
+          <li><h4>Przywróć</h4>${krok4}
+            ${przyciskKopiuj(RESET, 'Kopiuj: przywróć do zielonego startu', 'cyan')}</li>
+        </ol>
+        <details><summary>${k.test ? 'Wariant-pewniak (gdy po kroku 2 wszystko jest dalej zielone)' : 'Wariant-pewniak'}</summary><p>${escapeHtml(k.pewniak || 'brak')}</p></details>
+        <label class="postep"><input type="checkbox" data-klucz="${escapeHtml(klucz)}" data-sekcja="${s.id}"> zrobione</label>`;
+    }
+
     function render() {
       const root = document.querySelector('#sekcje');
       for (const s of SEKCJE) {
@@ -388,20 +467,14 @@
         sek.className = 'sekcja reveal';
         sek.id = 'sekcja-' + s.id;
         sek.innerHTML = '<h2>' + escapeHtml(s.tytul) + '</h2><p>' + escapeHtml(s.coToPoco) + '</p>'
+          + '<p class="gdzie-testy"><strong>Gdzie są te testy:</strong> <span class="plik">' + escapeHtml(s.pliki) + '</span></p>'
           + '<p class="licznik-postep" data-sekcja="' + s.id + '"></p>';
 
         for (const k of s.karty) {
           const karta = document.createElement('div');
           karta.className = 'karta-testu';
           const klucz = s.id + '-' + k.nazwa;
-          karta.innerHTML = `
-            <h3>${escapeHtml(k.nazwa)}</h3>
-            <p><em>Co sprawdza:</em> ${escapeHtml(k.coSprawdza)}</p>
-            <button class="retro magenta kopiuj" data-tekst="${encodeURIComponent(k.promptLamiacy)}">Kopiuj prompt łamiący</button>
-            <button class="retro cyan kopiuj" data-tekst="${encodeURIComponent(RESET)}">Kopiuj: przywróć do zielonego startu</button>
-            <details><summary>Spodziewaj się</summary><p>${escapeHtml(k.oczekiwanie)}</p></details>
-            <details><summary>Wariant-pewniak (jeśli AI był ostrożny)</summary><p>${escapeHtml(k.pewniak || 'brak')}</p></details>
-            <label class="postep"><input type="checkbox" data-klucz="${escapeHtml(klucz)}" data-sekcja="${s.id}"> zrobione</label>`;
+          karta.innerHTML = renderKarta(s, k, klucz);
           sek.appendChild(karta);
         }
 
