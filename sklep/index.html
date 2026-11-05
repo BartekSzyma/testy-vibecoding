@@ -5,42 +5,145 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sklep - poligon testowy</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #f4f4f8; color: #1a1a2e; }
-    h1 { font-size: 24px; }
-    #katalog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 520px; }
-    .karta { background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 12px; }
-    .karta button { margin-top: 8px; padding: 8px 12px; cursor: pointer; }
-    #podsumowanie { background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 16px; max-width: 340px; margin-top: 20px; }
-    #kwota-do-zaplaty { font-size: 22px; font-weight: bold; }
-    #komunikat-dostawa { color: #a15a00; font-size: 14px; }
+    /* Tylko fonty systemowe - zrzut wzorcowy (test V1) musi wyglądać identycznie przy każdym uruchomieniu,
+       a font pobierany z sieci mógłby się raz załadować, a raz nie. */
+    :root {
+      --tlo: #e9edf2;
+      --powierzchnia: #ffffff;
+      --tusz: #1d2433;
+      --wyciszony: #5b6577;
+      --linia: #d5dbe4;
+      --akcent: #2f4bd8;
+      --akcent-ciemny: #2238a8;
+      --uwaga: #8a5300;
+      --blad: #b3261e;
+      --sukces: #17784a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 32px 20px 48px;
+      background: var(--tlo); color: var(--tusz);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px; line-height: 1.5;
+    }
+    .naglowek, .uklad { max-width: 940px; margin: 0 auto; }
+    .naglowek { margin-bottom: 24px; }
+    h1 { font-size: 28px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.3px; }
+    .naglowek p { margin: 0; color: var(--wyciszony); max-width: 60ch; }
+
+    .uklad { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+
+    /* Katalog: półka z produktami */
+    #katalog { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .karta {
+      background: var(--powierzchnia); border: 1px solid var(--linia); border-radius: 14px;
+      padding: 12px 12px 14px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .karta::before {
+      content: ""; display: flex; align-items: center; justify-content: center;
+      height: 112px; border-radius: 10px; margin-bottom: 8px; font-size: 52px;
+      background: #eef1f5;
+    }
+    .karta[data-id="kubek"]::before { content: "☕"; background: #f6d6c2; }
+    .karta[data-id="koszulka"]::before { content: "👕"; background: #cfe0f7; }
+    .karta[data-id="plakat"]::before { content: "🖼️"; background: #e2d6f3; }
+    .karta[data-id="naklejka"]::before { content: "🏷️"; background: #cdebd7; }
+    .karta .nazwa { font-size: 17px; }
+    .karta .cena { color: var(--wyciszony); font-size: 15px; font-variant-numeric: tabular-nums; }
+    .karta button { margin-top: 8px; align-self: stretch; }
+
+    /* Przyciski */
+    button {
+      font: inherit; font-weight: 600; font-size: 15px; cursor: pointer;
+      padding: 9px 14px; min-height: 40px; border-radius: 10px;
+      border: 1px solid var(--akcent); background: var(--powierzchnia); color: var(--akcent);
+    }
+    button:hover { background: #eef1fd; }
+    button:focus-visible, input:focus-visible { outline: 3px solid #9fb0f3; outline-offset: 2px; }
+    #zloz-zamowienie { width: 100%; margin-top: 4px; background: var(--akcent); color: #fff; }
+    #zloz-zamowienie:hover { background: var(--akcent-ciemny); }
+    #zloz-zamowienie:disabled { background: #c9cfd9; border-color: #c9cfd9; color: #5b6577; cursor: not-allowed; }
+
+    /* Panel podsumowania (to on jest fotografowany w teście V1) */
+    #podsumowanie {
+      background: var(--powierzchnia); border: 1px solid var(--linia); border-radius: 14px; padding: 20px;
+    }
+    #podsumowanie p { margin: 0 0 12px; }
+    .licznik { font-weight: 600; }
+    #komunikat-dostawa { color: var(--uwaga); font-size: 14px; }
+    #podsumowanie label { display: block; font-size: 14px; color: var(--wyciszony); margin-bottom: 12px; }
+    #podsumowanie input {
+      display: block; width: 100%; margin-top: 4px; padding: 9px 11px; min-height: 40px;
+      font: inherit; color: var(--tusz); background: #fff;
+      border: 1px solid #b9c1ce; border-radius: 8px;
+    }
+    .kod-wiersz { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 12px; }
+    .kod-wiersz label { flex: 1; margin-bottom: 0 !important; }
+    #komunikat-rabat { color: var(--sukces); font-size: 14px; font-weight: 600; }
+    #komunikat-rabat:empty, #blad-formularza:empty { display: none; }
+    .do-zaplaty {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 14px 0; margin: 4px 0 16px !important;
+      border-top: 1px solid var(--linia); border-bottom: 1px solid var(--linia);
+    }
+    #kwota-do-zaplaty { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    #podsumowanie h2 { font-size: 18px; margin: 0 0 10px; }
+    .blad { color: var(--blad); font-size: 14px; }
+
+    /* Potwierdzenie zamówienia */
+    #potwierdzenie {
+      margin-top: 16px; padding: 18px 20px; border-radius: 14px;
+      background: #e3f4ea; border: 1px solid #9fd3b4; color: #0f4d30;
+    }
+    #potwierdzenie h2 { font-size: 18px; margin: 0 0 8px; }
+    #potwierdzenie p { margin: 0 0 4px; }
     #potwierdzenie[hidden] { display: none; }
-    .blad { color: #b00020; }
+
+    /* Telefon i wąskie ekrany: wszystko w jednej kolumnie */
+    @media (max-width: 720px) {
+      body { padding: 20px 14px 36px; }
+      .uklad { grid-template-columns: 1fr; }
+      #katalog { gap: 12px; }
+      .karta::before { height: 84px; font-size: 40px; }
+      .karta { padding: 10px 10px 12px; }
+      .karta button { padding: 8px 4px; font-size: 14px; }
+    }
   </style>
 </head>
 <body>
-  <h1>Sklep - poligon testowy</h1>
-  <div id="katalog"></div>
+  <header class="naglowek">
+    <h1>Sklep - poligon testowy</h1>
+    <p>Kubki, koszulki, plakaty i naklejki. Ceny w katalogu są netto - VAT 23% doliczamy w podsumowaniu.</p>
+  </header>
 
-  <section id="podsumowanie">
-    <p>Koszyk: <span id="licznik-koszyka">0</span> szt.</p>
-    <p id="komunikat-dostawa"></p>
-    <label>Kod rabatowy: <input id="kod-rabatowy" type="text"></label>
-    <button id="zastosuj-kod">Zastosuj</button>
-    <p id="komunikat-rabat"></p>
-    <p>Do zapłaty: <span id="kwota-do-zaplaty">0,00 zł</span></p>
-    <h2>Zamówienie</h2>
-    <label>Imię: <input id="imie" type="text"></label>
-    <label>E-mail: <input id="email" type="text"></label>
-    <label>Adres: <input id="adres" type="text"></label>
-    <p id="blad-formularza" class="blad"></p>
-    <button id="zloz-zamowienie" disabled>Złóż zamówienie</button>
-  </section>
+  <main class="uklad">
+    <div id="katalog"></div>
 
-  <section id="potwierdzenie" hidden>
-    <h2>Dziękujemy za zamówienie!</h2>
-    <p>Numer zamówienia: <span id="numer-zamowienia"></span></p>
-    <p>Kwota: <span id="kwota-potwierdzenie"></span></p>
-  </section>
+    <div class="kolumna-koszyka">
+      <section id="podsumowanie">
+        <p class="licznik">Koszyk: <span id="licznik-koszyka">0</span> szt.</p>
+        <p id="komunikat-dostawa"></p>
+        <div class="kod-wiersz">
+          <label>Kod rabatowy <input id="kod-rabatowy" type="text"></label>
+          <button id="zastosuj-kod">Zastosuj</button>
+        </div>
+        <p id="komunikat-rabat"></p>
+        <p class="do-zaplaty">Do zapłaty <span id="kwota-do-zaplaty">0,00 zł</span></p>
+        <h2>Zamówienie</h2>
+        <label>Imię <input id="imie" type="text"></label>
+        <label>E-mail <input id="email" type="text"></label>
+        <label>Adres <input id="adres" type="text"></label>
+        <p id="blad-formularza" class="blad"></p>
+        <button id="zloz-zamowienie" disabled>Złóż zamówienie</button>
+      </section>
+
+      <section id="potwierdzenie" hidden>
+        <h2>Dziękujemy za zamówienie!</h2>
+        <p>Numer zamówienia: <span id="numer-zamowienia"></span></p>
+        <p>Kwota: <span id="kwota-potwierdzenie"></span></p>
+      </section>
+    </div>
+  </main>
 
   <script type="module" src="src/ui.js"></script>
 </body>

@@ -18,7 +18,8 @@ function renderKatalog() {
   for (const produkt of KATALOG) {
     const karta = document.createElement('div');
     karta.className = 'karta';
-    karta.innerHTML = `<strong>${produkt.nazwa}</strong><br>${formatZl(produkt.cena)} netto`;
+    karta.dataset.id = produkt.id;
+    karta.innerHTML = `<strong class="nazwa">${produkt.nazwa}</strong><span class="cena">${formatZl(produkt.cena)} netto</span>`;
     const przycisk = document.createElement('button');
     przycisk.textContent = 'Dodaj do koszyka';
     przycisk.dataset.id = produkt.id;
