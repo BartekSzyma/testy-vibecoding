@@ -95,6 +95,11 @@ startu i Twój niezapisany test zniknie (to normalne - domyślnie testy są jedn
 
 ## Troubleshooting
 
+- **Vitest zielony, a wszystkie testy Playwright (S1, E1-E4, B3, V1, A1) czerwone od razu na
+  starcie?** Najpewniej na porcie 8080 działa już serwer z innego folderu (np. starsza kopia
+  sklepu) i testy klikają po nim zamiast po Twojej apce. Powiedz Claude Code: *"sprawdź, co
+  działa na porcie 8080, i zatrzymaj to, jeśli to serwer z innego folderu"*, potem "uruchom testy".
+
 - **Brak Node.js:** poproś Claude Code: "sprawdź wersję Node poleceniem `node --version`".
   Potrzebny Node 18+. Jeśli brak - poproś prowadzącego o pomoc z instalacją.
 - **`npx playwright install` długo trwa / błąd sieci:** pobranie przeglądarek to jednorazowy
